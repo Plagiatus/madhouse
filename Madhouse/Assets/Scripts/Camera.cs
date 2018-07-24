@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour {
 
+	public GameObject player;
+	private Vector3 offset;
 	private bool inInventory = false;
 	private bool inTransition = false;
 	[Range(-20,80)]
 	private float sanity;
 	private float targetSanity;
 
+	void Start () {
+		offset = this.transform.position - player.transform.position; 
+	}
+
 	void Update() {
 		Mathf.Lerp(sanity, targetSanity, Time.deltaTime);
 		distortImage();
-	}
-	
-	private void moveBehindPlayer(){
-		//TODO move camera always behind player. make sure it's not inside Object
 	}
 
 	public void transitionToState(bool toInventory){
