@@ -14,6 +14,7 @@ public class Player : MonoBehaviour, iHumanoid
 	#endregion
 
 	#region Attributes
+	public GameObject cam;
 	private Dictionary<eSlot, Item> items;
 	[Range(-20,80)]
 	private float sanity;
@@ -90,11 +91,43 @@ public class Player : MonoBehaviour, iHumanoid
 		}
 
 		private void move(float distance){
-			//TODO: call this from the inputManager when you know how far to move. also, implement this.
+			float speed = 4.0f;
+			float temp1 = -Input.acceleration.z * Time.deltaTime * speed;
+
+			if (-Input.acceleration.z < 1 && Input.acceleration.z > -1)
+        	{
+				transform.Translate(0, 0, temp1);
+			}
 		}
 
 		private void turn(float speed){
-			//TODO: call this from the inputManager when you know how fast you need to turn. also, implement this.
+			transform.Rotate(0, speed * Input.acceleration.x, 0);
+		}
+
+		private void moveCameraBehindPLayer(){
+			RaycastHit hit;
+			Vector3 hitPoint;
+			Vector3 temp1; //globale Variable?
+
+			// !!! muss in die Start(): 
+			temp1 = this.cam.transform.localPosition;
+			
+			Ray ray = new Ray(this.transform.position + Vector3.up * 0.5f, transform.forward * -1);
+			Debug.DrawRay(ray.origin, ray.direction, Color.green, 1);
+			// Debug.Log(Physics.Raycast(ray, out hit, 2.5f));
+			if (Physics.Raycast(ray, out hit, 2.5f)){
+				hitPoint = hit.point;
+				// Debug.Log("hit");
+				// Debug.Log(hitPoint);
+				// worldposition auf lokalposition setzen
+				cam.transform.localPosition = transform.InverseTransformPoint(hitPoint);
+				Debug.Log(cam.transform.localPosition);
+			}
+			// camera auf standard setzen
+			else { 
+				cam.transform.localPosition = temp1; 
+				// Debug.Log("no hit"); 
+			}
 		}
 
 		private void InteractWithObject(GameObject go){
