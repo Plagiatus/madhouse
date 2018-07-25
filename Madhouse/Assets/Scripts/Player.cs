@@ -27,6 +27,8 @@ public class Player : MonoBehaviour, iHumanoid
 	private float sleep;
 	private eAction action;
 	private AudioSource micinput;
+	private Rigidbody rb;
+	private Vector3 defaultCameraPositon;
 	#endregion
 
 	void Start(){
@@ -34,6 +36,13 @@ public class Player : MonoBehaviour, iHumanoid
 	}
 
 	#region UnityMethods
+	
+	void Start(){
+		movementSpeed = 4f;
+		rb = GetComponent<Rigidbody>();
+		defaultCameraPositon = cam.transform.position;
+	}
+
 	void Update(){
 		inputManager();
 		updateMentalState();
@@ -92,20 +101,33 @@ public class Player : MonoBehaviour, iHumanoid
 		
 		#region privateMethods
 		private void inputManager(){
-			//TODO: create logic to move & interact
-		}
+			//move forward
+			if (-Input.acceleration.z < 1 && Input.acceleration.z > -1)
+        	{
+				move(-Input.acceleration.z * Time.deltaTime * movementSpeed * Config.sensitivity);
+			}
+			//turn
+			turn(Input.acceleration.x * Config.sensitivity * movementSpeed);
 
-		private void move(float distance){
-			float speed = 4.0f;
-			float temp1 = -Input.acceleration.z * Time.deltaTime * speed;
-
-			if (-Input.acceleration.z < 0.8 && Input.acceleration.z > -0.7)        	{
-				transform.Translate(0, 0, temp1);
+			//interact with object
+			if(Input.GetMouseButtonDown(0)){
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
+				if(Physics.Raycast(ray, out hit)){
+					if((this.transform.position - hit.transform.position).magnitude < Config.interactionDistance){
+						InteractWithObject(hit.transform.gameObject);
+					}
+				}
 			}
 		}
 
+		private void move(float distance){
+			//TODO: rewrite to use rigidbody
+			transform.Translate(0, 0, distance);
+		}
+
 		private void turn(float speed){
-			transform.Rotate(0, speed * Input.acceleration.x, 0);
+			transform.Rotate(0, speed, 0);
 		}
 
 		private void goToInventory(){
@@ -115,7 +137,13 @@ public class Player : MonoBehaviour, iHumanoid
 		}
 
 		private void InteractWithObject(GameObject go){
-			//TODO: implement the interaction with different objects after the interaction has been detected by the input Manager
+			if(go.GetComponent<Door>() != null){
+				Door door = go.GetComponent<Door>();
+				//TODO: implement Door interaction
+			} else if (go.GetComponent<Container>() != null){
+				Container container = go.GetComponent<Container>();
+				//TODO: implement Container interaction
+			}
 		}
 
 		private void updateMentalState(){

@@ -5,8 +5,11 @@ using UnityEngine;
 public static class Config {
 
 	//Sensitivity should affect the speed of which certain events are triggered. higher numbers = faster trigger
-	[Range(0,10)]
-	public static float sensitivity = 2; 
+	[Range(0.1f,2)]
+	public static float sensitivity = 1; 
+
+	public static float highlightDistance = 10;
+	public static float interactionDistance = 2;
 
 
 	//Dictionary of what needs to be the mental state before an action can be done. (stability, sanity)
