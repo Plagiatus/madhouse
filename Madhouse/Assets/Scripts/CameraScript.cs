@@ -6,6 +6,7 @@ using UnityEngine.Rendering.PostProcessing;
 public class CameraScript : MonoBehaviour {
 
 	public GameObject player;
+
 	private Vector3 offset;
 	private bool inInventory = false;
 	private bool inTransition = false;
@@ -15,31 +16,30 @@ public class CameraScript : MonoBehaviour {
     private PostProcessVolume PostProcess;
 	private Vector3 temp1;
 
+    private float currentBloomIntensity;
+    private float currentDirtIntensity;
+    public float PulseThreshhold = 0.7f;
+    public Texture Insanity_Effect;
+
+    private float currentDistortion;
+    private float targetDistortion;
+    private float distortionThreshhold = 0.1f;
+    private float distortionGrowth = 1f;
 
     void Start () {
 		offset = this.transform.position - player.transform.position;
         PostProcess = this.GetComponent<PostProcessVolume>();
         offset = this.transform.position - player.transform.position;
         temp1 = this.transform.localPosition;
+        currentBloomIntensity = PostProConstants.bloom_IntesityNormal;
+        currentDirtIntensity = PostProConstants.dirt_IntesityNormal;
     }
 
 	void Update() {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            targetSanity = -20;
-        }
-            
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            targetSanity = 80;
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            targetSanity = 0;
-        }
+
         sanity = Mathf.Lerp(sanity, targetSanity, Time.deltaTime);
-        Debug.Log("Insanity at " + sanity);
-        Debug.Log("Target Sanity at " + targetSanity);
+        //Debug.Log("Insanity at " + sanity);
+        //Debug.Log("Target Sanity at " + targetSanity);
         distortImage();
 	}
 
@@ -56,7 +56,7 @@ public class CameraScript : MonoBehaviour {
 				// Debug.Log(hitPoint);
 				// worldposition auf lokalposition setzen
 				player.transform.localPosition = this.transform.InverseTransformPoint(hitPoint);
-				Debug.Log(player.transform.localPosition);
+				//Debug.Log(player.transform.localPosition);
 			}
 			// camera auf standard setzen
 			else { 
@@ -94,7 +94,6 @@ public class CameraScript : MonoBehaviour {
         {
             sanityPerc = 0;
         }
-
         //Setting Depth of Field
         DepthOfField depthOfField = ScriptableObject.CreateInstance <DepthOfField>();
         depthOfField.enabled.Override(true);
@@ -129,7 +128,84 @@ public class CameraScript : MonoBehaviour {
             PostProcess.profile.RemoveSettings<ColorGrading>();
         PostProcess.profile.AddSettings(colorGrading);
 
+        //Setting Bloom 
+        float maxBloomIntensity = (PostProConstants.bloom_IntensityInsane - PostProConstants.bloom_IntesityNormal) * sanityPerc + PostProConstants.bloom_IntesityNormal;
+        float maxDirtIntensity = (PostProConstants.dirt_IntensityInsane - PostProConstants.dirt_IntesityNormal) * sanityPerc + PostProConstants.dirt_IntesityNormal;
+        if(sanityPerc >= PulseThreshhold)
+        {
+            currentBloomIntensity = maxBloomIntensity * Mathf.Abs(Mathf.Sin(Time.time * (sanityPerc * 2)));
+            currentDirtIntensity = maxDirtIntensity * Mathf.Abs(Mathf.Sin(Time.time * (sanityPerc * 2)));
+        }
+        else
+        {
+            currentBloomIntensity = maxBloomIntensity;
+            currentDirtIntensity = maxDirtIntensity;
+        }
+        Bloom bloom = ScriptableObject.CreateInstance<Bloom>();
+        bloom.enabled.Override(true);
+        bloom.dirtTexture.Override(Insanity_Effect);
+        bloom.threshold.Override(PostProConstants.bloom_Threshold);
+        if(sanity != 0)
+        {
+            bloom.dirtIntensity.Override(currentDirtIntensity);
+            if(sanity > 0)
+            {
+                bloom.intensity.Override(currentBloomIntensity);
+            }
+        }
+        else
+        {
+            bloom.dirtIntensity.Override(PostProConstants.dirt_IntesityNormal);
+            bloom.intensity.Override(PostProConstants.bloom_IntesityNormal);
+        }
+        if (PostProcess.profile.HasSettings<Bloom>())
+            PostProcess.profile.RemoveSettings<Bloom>();
+        PostProcess.profile.AddSettings(bloom);
 
+        //Setting Vignette
+        Vignette vignette = ScriptableObject.CreateInstance<Vignette>();
+        vignette.enabled.Override(true);
+        vignette.mode.Override(PostProConstants.vignetteMode);
+        vignette.opacity.Override(sanityPerc * 100);
+        vignette.mask.Override(Insanity_Effect);
+        if (PostProcess.profile.HasSettings<Vignette>())
+            PostProcess.profile.RemoveSettings<Vignette>();
+        PostProcess.profile.AddSettings(vignette);
+
+        //Setting Grain
+        Grain grain = ScriptableObject.CreateInstance<Grain>();
+        grain.enabled.Override(true);
+        grain.size.Override(PostProConstants.grain_size);
+        grain.intensity.Override((PostProConstants.grain_IntensityInsane - PostProConstants.grain_IntensityNormal) * sanityPerc + PostProConstants.grain_IntensityNormal);
+        float currentLuminance = PostProConstants.luminance_ContributionMax * Mathf.Abs(Mathf.Sin(Time.time * (sanityPerc * 2)));
+        grain.lumContrib.Override(currentLuminance);
+        if (PostProcess.profile.HasSettings<Grain>())
+            PostProcess.profile.RemoveSettings<Grain>();
+        PostProcess.profile.AddSettings(grain);
+
+        //Lense Distortion
+        LensDistortion distortion = ScriptableObject.CreateInstance<LensDistortion>();
+        if (currentDistortion < targetDistortion)
+        {
+            currentDistortion = currentDistortion + distortionGrowth;
+        }
+        else
+        { 
+            targetDistortion = 0;
+            if(currentDistortion > targetDistortion)
+            {
+                currentDistortion = currentDistortion - Time.deltaTime * 2;
+            }
+            if(currentDistortion <= 0)
+            {
+                currentDistortion = 0;
+            }
+        }
+        distortion.enabled.Override(true);
+        distortion.intensity.Override(-currentDistortion);
+        if (PostProcess.profile.HasSettings<LensDistortion>())
+            PostProcess.profile.RemoveSettings<LensDistortion>();
+        PostProcess.profile.AddSettings(distortion);
     }
 
 	public void moveSanityTo(float newSanity){
