@@ -26,11 +26,40 @@ public class ItemDragHandler : MonoBehaviour {
 			{eSlot.LEFTPOCKET, playerItems[eSlot.LEFTPOCKET]},
 			{eSlot.RIGHTPOCKET, playerItems[eSlot.RIGHTPOCKET]}
 		};
+
+		createItems();
+	}
+
+	void OnDisable(){
+		for(int i = 0; i < transform.childCount; i++){
+			GameObject go = transform.GetChild(i).gameObject;
+			if(go.tag == "Item"){
+				Destroy(go);
+			}
+		}
+	}
+
+	void createItems(){
+		for(int i = 0; i < transform.childCount; i++){
+			GameObject go = transform.GetChild(i).gameObject;
+			if(go.tag == "Item"){
+				Destroy(go);
+			}
+		}
+		foreach(KeyValuePair<eSlot,Item> pair in items){
+			if(pair.Value != null){
+				GameObject newItem = (GameObject) Instantiate(Resources.Load("Prefab/" + pair.Value.itemname));
+				newItem.transform.position = GameObject.Find(Config.enumToNameString(pair.Key)).transform.position + Vector3.up * newItem.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
+				newItem.GetComponent<Item_Mono>().itemname = pair.Value.itemname;
+				newItem.transform.parent = this.transform;
+			}
+		}
 	}
 	
 	public void addContainer(Container co){
 		container = co;
 		activateContainer();
+		createItems();
 	}
 
 	void activateContainer(){
@@ -68,6 +97,24 @@ public class ItemDragHandler : MonoBehaviour {
 			if(slotGO != null){
 				//if item was pulled onto a slot
 				eSlot currentSlot = Config.gameObjectToEnum(slotGO);
+				//if the new slot is currently occupied
+				if(Config.isPlayerSlot(currentSlot)){
+					if(player.getItems()[currentSlot] != null){
+						foreach(GameObject go in GameObject.FindGameObjectsWithTag("Item")){
+							if(go.GetComponent<Item_Mono>() != null){
+								if(go.GetComponent<Item_Mono>().itemname == player.getItems()[currentSlot].itemname){
+									go.transform.position = GameObject.Find(Config.enumToNameString(originSlot)).transform.position + Vector3.up * target.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
+									break;
+								}
+							}
+						}
+					}
+				} else {
+					if(container.getItems()[currentSlot] != null){
+						GameObject.Find(container.getItems()[currentSlot].itemname).transform.position = GameObject.Find(Config.enumToNameString(originSlot)).transform.position + Vector3.up * target.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
+					}
+				}
+
 				//if both items are inside the player inventory
 				if(Config.isPlayerSlot(currentSlot) && Config.isPlayerSlot(originSlot)){
 					player.swapItems(originSlot,currentSlot);

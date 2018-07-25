@@ -53,4 +53,23 @@ public static class Config {
 		if (g.name == "Rightpocket") return eSlot.RIGHTPOCKET;
 		return eSlot.HAND;
 	}
+
+	public static string enumToNameString(eSlot slot){
+		switch(slot){
+			case eSlot.HAND:
+			return "Hand";
+			case eSlot.CENTER:
+			return "Center";
+			case eSlot.LEFT:
+			return "Left";
+			case eSlot.RIGHT:
+			return "Right";
+			case eSlot.LEFTPOCKET:
+			return "Leftpocket";
+			case eSlot.RIGHTPOCKET:
+			return "Rightpocket";
+			default:
+			return null;
+		}
+	}
 }

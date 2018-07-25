@@ -40,8 +40,8 @@ public class Player : MonoBehaviour, iHumanoid
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
 		items = new Dictionary<eSlot, Item>() {
-			{eSlot.HAND, null},
-			{eSlot.LEFTPOCKET, null},
+			{eSlot.HAND, new Item("Pen1",10,false)},
+			{eSlot.LEFTPOCKET, new Item("Item2", 80, true)},
 			{eSlot.RIGHTPOCKET, null}
 		};
 	}
