@@ -30,6 +30,10 @@ public class Player : MonoBehaviour, iHumanoid
 	private Vector3 defaultCameraPositon;
 	#endregion
 
+	void Start(){
+		camAnim = GetComponent<Animator>();
+	}
+
 	#region UnityMethods
 	
 	void Start(){
@@ -131,25 +135,9 @@ public class Player : MonoBehaviour, iHumanoid
 			transform.Rotate(0, speed, 0);
 		}
 
-		private void moveCameraBehindPlayer(){
-			RaycastHit hit;
-			Vector3 hitPoint;
-			
-			Ray ray = new Ray(this.transform.position + Vector3.up * 0.5f, transform.forward * -1);
-			Debug.DrawRay(ray.origin, ray.direction, Color.green, 1);
-			// Debug.Log(Physics.Raycast(ray, out hit, 2.5f));
-			if (Physics.Raycast(ray, out hit, 2.5f)){
-				hitPoint = hit.point;
-				// Debug.Log("hit");
-				// Debug.Log(hitPoint);
-				// worldposition auf lokalposition setzen
-				cam.transform.localPosition = this.transform.InverseTransformPoint(hitPoint);
-				Debug.Log(cam.transform.localPosition);
-			}
-			// camera auf standard setzen
-			else { 
-				cam.transform.localPosition = defaultCameraPositon; 
-				// Debug.Log("no hit"); 
+		private void goToInventory(){
+			if (-Input.acceleration.z > 0.8) {
+				camAnim.Play("CamAnim");
 			}
 		}
 
