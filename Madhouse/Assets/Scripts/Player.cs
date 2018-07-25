@@ -30,12 +30,14 @@ public class Player : MonoBehaviour, iHumanoid
 	private Vector3 defaultCameraPositon;
 
 	private Animator camAnim;
+	private Animator camStandard;
 	#endregion
 
 	#region UnityMethods
 	
 	void Start(){
 		camAnim = GetComponent<Animator>();
+		camStandard = GetComponent<Animator>();
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
