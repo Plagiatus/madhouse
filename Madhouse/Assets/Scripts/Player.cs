@@ -28,18 +28,22 @@ public class Player : MonoBehaviour, iHumanoid
 	private AudioSource micinput;
 	private Rigidbody rb;
 	private Vector3 defaultCameraPositon;
-	#endregion
 
-	void Start(){
-		camAnim = GetComponent<Animator>();
-	}
+	private Animator camAnim;
+	#endregion
 
 	#region UnityMethods
 	
 	void Start(){
+		camAnim = GetComponent<Animator>();
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
+		items = new Dictionary<eSlot, Item>() {
+			{eSlot.HAND, null},
+			{eSlot.LEFTPOCKET, null},
+			{eSlot.RIGHTPOCKET, null}
+		};
 	}
 
 	void Update(){

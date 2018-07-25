@@ -18,15 +18,14 @@ public class ItemDragHandler : MonoBehaviour {
 	eSlot originSlot;
 
 	void OnEnable () {
-		items.Clear();
-		items.Add(eSlot.HAND, null);
-		items.Add(eSlot.LEFTPOCKET, null);
-		items.Add(eSlot.RIGHTPOCKET, null);
 		container = null;
+		transform.Find("Container").gameObject.SetActive(false);
 		Dictionary<eSlot, Item> playerItems = player.getItems();
-		foreach(KeyValuePair<eSlot, Item> pair in items){
-			items[pair.Key] = playerItems[pair.Key];
-		}
+		items = new Dictionary<eSlot, Item>(){
+			{eSlot.HAND, playerItems[eSlot.HAND]},
+			{eSlot.LEFTPOCKET, playerItems[eSlot.LEFTPOCKET]},
+			{eSlot.RIGHTPOCKET, playerItems[eSlot.RIGHTPOCKET]}
+		};
 	}
 	
 	public void addContainer(Container co){
@@ -35,14 +34,12 @@ public class ItemDragHandler : MonoBehaviour {
 	}
 
 	void activateContainer(){
-		items.Add(eSlot.LEFT, null);
-		items.Add(eSlot.CENTER, null);
-		items.Add(eSlot.RIGHT, null);
+		transform.Find("Container").gameObject.SetActive(true);
 		Dictionary<eSlot, Item> containerItems = container.getItems();
 		
-		items[eSlot.LEFT] = containerItems[eSlot.LEFT];
-		items[eSlot.RIGHT] = containerItems[eSlot.RIGHT];
-		items[eSlot.CENTER] = containerItems[eSlot.CENTER];
+		items.Add(eSlot.LEFT, containerItems[eSlot.LEFT]);
+		items.Add(eSlot.CENTER, containerItems[eSlot.CENTER]);
+		items.Add(eSlot.RIGHT, containerItems[eSlot.RIGHT]);
 	}
 
 	void Update () {
@@ -51,8 +48,8 @@ public class ItemDragHandler : MonoBehaviour {
 		if(Input.GetMouseButtonDown(0)){
 			RaycastHit hitInfo;
 			target = GetClickedObject(out hitInfo);
-			if(target != null && target.GetComponent<Item>() != null){
-				originSlot = Config.gameObjectToEnum(GetClickedSlot(out hitInfo));
+			if(target != null && target.gameObject.tag == "Item"){
+				if(GetClickedSlot(out hitInfo) != null) originSlot = Config.gameObjectToEnum(GetClickedSlot(out hitInfo));
 				isDragging = true;
 				originalTargetPosition = target.transform.position;
 				positionOfScreen = Camera.main.WorldToScreenPoint(target.transform.position);

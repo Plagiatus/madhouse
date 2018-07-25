@@ -40,7 +40,7 @@ public static class Config {
 	};
 	
 	public static bool isPlayerSlot(eSlot slot){
-		if((int) slot > 2) return true;
+		if((int) slot < 3) return true;
 		return false;
 	}
 
