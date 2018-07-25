@@ -20,6 +20,6 @@ public class ProximityTest2 : MonoBehaviour {
 	}
 
 	public void showOutline(float _intensity){
-		intensity = (100 - _intensity) / 10;
+		intensity = 10 - _intensity;
 	}
 }

@@ -4,6 +4,14 @@ using UnityEngine;
 public class Container : MonoBehaviour, iInteractable{
 	protected Dictionary<eSlot, Item> items;
 
+	void Start(){
+		items = new Dictionary<eSlot, Item>(){
+			{eSlot.CENTER, new Item("Item1",10,false)},
+			{eSlot.LEFT, null},
+			{eSlot.RIGHT, null}
+		};
+	}
+
     public void interact()
     {
         throw new System.NotImplementedException();

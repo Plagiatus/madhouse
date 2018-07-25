@@ -24,9 +24,9 @@ public class ProximityTest : MonoBehaviour {
 			rb.AddForce(Vector3.right);
 		}
 
-		Collider[] closeColliders = Physics.OverlapSphere(transform.position, 10);
+		Collider[] closeColliders = Physics.OverlapSphere(transform.position, Config.highlightDistance);
 		foreach(Collider c in closeColliders){
-			if(c is BoxCollider) c.gameObject.GetComponent<ProximityTest2>().showOutline((this.transform.position - c.gameObject.transform.position).sqrMagnitude);
+			if(c is BoxCollider && c.gameObject.GetComponent<ProximityTest2>() != null) c.gameObject.GetComponent<ProximityTest2>().showOutline((this.transform.position - c.gameObject.transform.position).magnitude);
 		}
 	}
 }

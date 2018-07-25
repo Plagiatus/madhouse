@@ -20,6 +20,7 @@ public class ItemDragHandler : MonoBehaviour {
 	void OnEnable () {
 		container = null;
 		transform.Find("Container").gameObject.SetActive(false);
+		transform.Find("Player").gameObject.SetActive(true);
 		Dictionary<eSlot, Item> playerItems = player.getItems();
 		items = new Dictionary<eSlot, Item>(){
 			{eSlot.HAND, playerItems[eSlot.HAND]},
@@ -104,6 +105,7 @@ public class ItemDragHandler : MonoBehaviour {
 							if(go.GetComponent<Item_Mono>() != null){
 								if(go.GetComponent<Item_Mono>().itemname == player.getItems()[currentSlot].itemname){
 									go.transform.position = GameObject.Find(Config.enumToNameString(originSlot)).transform.position + Vector3.up * target.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
+									Debug.Log(go.transform.position.y);
 									break;
 								}
 							}
@@ -111,7 +113,15 @@ public class ItemDragHandler : MonoBehaviour {
 					}
 				} else {
 					if(container.getItems()[currentSlot] != null){
-						GameObject.Find(container.getItems()[currentSlot].itemname).transform.position = GameObject.Find(Config.enumToNameString(originSlot)).transform.position + Vector3.up * target.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
+						foreach(GameObject go in GameObject.FindGameObjectsWithTag("Item")){
+							if(go.GetComponent<Item_Mono>() != null){
+								if(go.GetComponent<Item_Mono>().itemname == container.getItems()[currentSlot].itemname){
+									go.transform.position = GameObject.Find(Config.enumToNameString(originSlot)).transform.position + Vector3.up * target.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
+									Debug.Log(go.transform.position.y);
+									break;
+								}
+							}
+						}
 					}
 				}
 

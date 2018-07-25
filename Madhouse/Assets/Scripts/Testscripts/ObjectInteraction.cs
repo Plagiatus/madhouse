@@ -10,11 +10,13 @@ public class ObjectInteraction : MonoBehaviour {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if(Physics.Raycast(ray, out hit)){
-				if((this.transform.position - hit.transform.position).magnitude < 10){
+				if((this.transform.position - hit.transform.position).magnitude < Config.interactionDistance){
 					if(hit.transform.gameObject.GetComponent<Door>() != null){
 						Debug.Log("Door");
 					} else if (hit.transform.gameObject.GetComponent<Container>() != null){
-						Debug.Log("Container");
+						ItemDragHandler idh = Camera.main.GetComponent<ItemDragHandler>();
+						idh.enabled = true;
+						idh.addContainer(hit.transform.gameObject.GetComponent<Container>());
 					}
 				}
 			}

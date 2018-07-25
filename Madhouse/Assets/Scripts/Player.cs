@@ -29,14 +29,14 @@ public class Player : MonoBehaviour, iHumanoid
 	private Rigidbody rb;
 	private Vector3 defaultCameraPositon;
 
-	private Animator camAnim;
+	// private Animator camAnim;
 	private Animator camStandard;
 	#endregion
 
 	#region UnityMethods
 	
 	void Start(){
-		camAnim = GetComponent<Animator>();
+		// camAnim = GetComponent<Animator>();
 		camStandard = GetComponent<Animator>();
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
@@ -115,7 +115,7 @@ public class Player : MonoBehaviour, iHumanoid
 			//move forward
 			if (-Input.acceleration.z < 0.8)
         	{
-				camAnim.SetBool("Inventory", false);	
+				// camAnim.SetBool("Inventory", false);	
 				move(-Input.acceleration.z * Time.deltaTime * movementSpeed * Config.sensitivity);
 			}
 			//turn
@@ -144,7 +144,7 @@ public class Player : MonoBehaviour, iHumanoid
 
 		private void goToInventory(){
 			if (-Input.acceleration.z > 0.8) {
-				camAnim.SetBool("Inventory", true);		
+				// camAnim.SetBool("Inventory", true);		
 			}
 		}
 
