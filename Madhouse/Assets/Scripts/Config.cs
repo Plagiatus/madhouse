@@ -39,4 +39,18 @@ public static class Config {
 		{eAction.WALK, new Vector2(0, 0)},
 	};
 	
+	public static bool isPlayerSlot(eSlot slot){
+		if((int) slot > 2) return true;
+		return false;
+	}
+
+	public static eSlot gameObjectToEnum(GameObject g){
+		if (g.name == "Hand") return eSlot.HAND;
+		if (g.name == "Center") return eSlot.CENTER;
+		if (g.name == "Left") return eSlot.LEFT;
+		if (g.name == "Right") return eSlot.RIGHT;
+		if (g.name == "Leftpocket") return eSlot.LEFTPOCKET;
+		if (g.name == "Rightpocket") return eSlot.RIGHTPOCKET;
+		return eSlot.HAND;
+	}
 }

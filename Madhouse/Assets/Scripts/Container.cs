@@ -15,7 +15,7 @@ public class Container : MonoBehaviour, iInteractable{
 
 	public Item takeItem(eSlot slot){
 		Item ret = items[slot];
-		items.Remove(slot);
+		items[slot] = null;
 		return ret;
 	}
 
@@ -23,6 +23,16 @@ public class Container : MonoBehaviour, iInteractable{
 		Item ret = items[slot];
 		items[slot] = item;
 		return ret;
+	}
+
+	public bool swapItems(eSlot slot1, eSlot slot2){
+		if(items[slot1] == items[slot2]) return false;
+		
+		Item tmp = items[slot1];
+		items[slot1] = items[slot2];
+		items[slot2] = tmp;
+
+		return true;
 	}
 
 }

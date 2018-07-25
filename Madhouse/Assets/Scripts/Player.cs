@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour, iHumanoid
 {
 	#region iHumanoid
-    public float movementSpeed{get{return movementSpeed;} set{movementSpeed = value;}}
+    public float movementSpeed;
 
     public void moveTo(Vector2 pos)
     {
@@ -68,6 +68,12 @@ public class Player : MonoBehaviour, iHumanoid
 			return true;
 		}
 
+		public Item takeItem(eSlot slot){
+			Item ret = items[slot];
+			items[slot] = null;
+			return ret;
+		}	
+
 		public void eat(float nutrition){
 			hunger = Mathf.Clamp(hunger + nutrition, 0, 100);
 		}
@@ -125,7 +131,7 @@ public class Player : MonoBehaviour, iHumanoid
 			transform.Rotate(0, speed, 0);
 		}
 
-		private void moveCameraBehindPLayer(){
+		private void moveCameraBehindPlayer(){
 			RaycastHit hit;
 			Vector3 hitPoint;
 			
@@ -137,7 +143,7 @@ public class Player : MonoBehaviour, iHumanoid
 				// Debug.Log("hit");
 				// Debug.Log(hitPoint);
 				// worldposition auf lokalposition setzen
-				cam.transform.localPosition = transform.InverseTransformPoint(hitPoint);
+				cam.transform.localPosition = this.transform.InverseTransformPoint(hitPoint);
 				Debug.Log(cam.transform.localPosition);
 			}
 			// camera auf standard setzen
@@ -164,6 +170,7 @@ public class Player : MonoBehaviour, iHumanoid
 		private void updateAppearance(){
 			//TODO: update the Appearance depending on the current action as well as the different mental states
 		}
+
 		#endregion
 
 	#endregion
