@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 177113300}
   - component: {fileID: 177113299}
   - component: {fileID: 177113304}
+  - component: {fileID: 177113305}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -224,6 +225,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ddf4befaf6e6da44bfb0d20346e56d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &177113305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 177113298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3d10744b4c9084ca5648cd9aa238ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &337461651
@@ -752,6 +764,7 @@ GameObject:
   - component: {fileID: 1021340349}
   - component: {fileID: 1021340348}
   - component: {fileID: 1021340353}
+  - component: {fileID: 1021340354}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -852,6 +865,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 673b2d982ba603140938dcc7ad90bd9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1021340354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1021340347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3cb520f27ea65d42b7ff40c75ec81b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1251731832
@@ -1162,6 +1186,7 @@ GameObject:
   - component: {fileID: 1929332529}
   - component: {fileID: 1929332533}
   - component: {fileID: 1929332534}
+  - component: {fileID: 1929332535}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1262,5 +1287,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 673b2d982ba603140938dcc7ad90bd9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1929332535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1929332528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc0989f38cc68b84aab20f9211b08b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
