@@ -17,6 +17,7 @@ MonoBehaviour:
   - {fileID: 114609933794409566}
   - {fileID: 114123421445958118}
   - {fileID: 114743282981881716}
+  - {fileID: 114704176964362568}
 --- !u!114 &114123421445958118
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -33,8 +34,8 @@ MonoBehaviour:
     overrideState: 1
     value: 1
   mode:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1
   color:
     overrideState: 0
     value: {r: 0, g: 0, b: 0, a: 1}
@@ -54,7 +55,7 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   mask:
-    overrideState: 0
+    overrideState: 1
     value: {fileID: 0}
   opacity:
     overrideState: 0
@@ -73,7 +74,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   gradingMode:
     overrideState: 1
     value: 0
@@ -349,7 +350,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   intensity:
     overrideState: 1
     value: 0
@@ -382,16 +383,16 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   focusDistance:
-    overrideState: 0
-    value: 10
+    overrideState: 1
+    value: 1
   aperture:
-    overrideState: 0
-    value: 5.6
+    overrideState: 1
+    value: 5.5
   focalLength:
-    overrideState: 0
-    value: 50
+    overrideState: 1
+    value: 35
   kernelSize:
     overrideState: 0
     value: 1
@@ -409,7 +410,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   colored:
     overrideState: 0
     value: 1
@@ -439,7 +440,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 5
+    value: 11.66
   threshold:
     overrideState: 1
     value: 0.8
@@ -463,4 +464,4 @@ MonoBehaviour:
     value: {fileID: 2800000, guid: c960ca73eb30ac149aefa122ade71ffa, type: 3}
   dirtIntensity:
     overrideState: 1
-    value: 3
+    value: 0

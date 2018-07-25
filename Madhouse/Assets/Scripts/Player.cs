@@ -31,9 +31,6 @@ public class Player : MonoBehaviour, iHumanoid
 	private Vector3 defaultCameraPositon;
 	#endregion
 
-	void Start(){
-		camAnim = GetComponent<Animator>();
-	}
 
 	#region UnityMethods
 	
@@ -41,7 +38,8 @@ public class Player : MonoBehaviour, iHumanoid
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
-	}
+        camAnim = GetComponent<Animator>();
+    }
 
 	void Update(){
 		inputManager();
