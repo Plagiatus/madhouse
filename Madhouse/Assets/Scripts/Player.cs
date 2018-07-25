@@ -111,8 +111,9 @@ public class Player : MonoBehaviour, iHumanoid
 		#region privateMethods
 		private void inputManager(){
 			//move forward
-			if (-Input.acceleration.z < 1 && Input.acceleration.z > -1)
+			if (-Input.acceleration.z < 0.8)
         	{
+				camAnim.SetBool("Inventory", false);	
 				move(-Input.acceleration.z * Time.deltaTime * movementSpeed * Config.sensitivity);
 			}
 			//turn
@@ -141,7 +142,7 @@ public class Player : MonoBehaviour, iHumanoid
 
 		private void goToInventory(){
 			if (-Input.acceleration.z > 0.8) {
-				camAnim.Play("CamAnim");
+				camAnim.SetBool("Inventory", true);		
 			}
 		}
 
