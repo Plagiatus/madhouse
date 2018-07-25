@@ -30,7 +30,8 @@ public class Player : MonoBehaviour, iHumanoid
 	private Vector3 defaultCameraPositon;
 
 	// private Animator camAnim;
-	private Animator camStandard;
+	public Animator camStandard;
+	public Animator playerAnimator;
 	#endregion
 
 	#region UnityMethods
