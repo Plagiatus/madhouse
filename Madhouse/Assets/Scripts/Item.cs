@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Item : MonoBehaviour {
+public class Item {
 	public string itemname;
 	[Range(0, 100)]
 	public int noticeable;

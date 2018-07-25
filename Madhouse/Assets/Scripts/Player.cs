@@ -5,8 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour, iHumanoid
 {
 	#region iHumanoid
-    public float movementSpeed{get{return movementSpeed;} set{movementSpeed = value;}}
-	public Animator camAnim;
+    public float movementSpeed;
 
     public void moveTo(Vector2 pos)
     {
@@ -29,17 +28,25 @@ public class Player : MonoBehaviour, iHumanoid
 	private AudioSource micinput;
 	private Rigidbody rb;
 	private Vector3 defaultCameraPositon;
-	#endregion
 
+	private Animator camAnim;
+	private Animator camStandard;
+	#endregion
 
 	#region UnityMethods
 	
 	void Start(){
+		camAnim = GetComponent<Animator>();
+		camStandard = GetComponent<Animator>();
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
-        camAnim = GetComponent<Animator>();
-    }
+		items = new Dictionary<eSlot, Item>() {
+			{eSlot.HAND, new Item("Pen1",10,false)},
+			{eSlot.LEFTPOCKET, new Item("Item2", 80, true)},
+			{eSlot.RIGHTPOCKET, null}
+		};
+	}
 
 	void Update(){
 		inputManager();
@@ -71,6 +78,12 @@ public class Player : MonoBehaviour, iHumanoid
 			return true;
 		}
 
+		public Item takeItem(eSlot slot){
+			Item ret = items[slot];
+			items[slot] = null;
+			return ret;
+		}	
+
 		public void eat(float nutrition){
 			hunger = Mathf.Clamp(hunger + nutrition, 0, 100);
 		}
@@ -100,8 +113,9 @@ public class Player : MonoBehaviour, iHumanoid
 		#region privateMethods
 		private void inputManager(){
 			//move forward
-			if (-Input.acceleration.z < 1 && Input.acceleration.z > -1)
+			if (-Input.acceleration.z < 0.8)
         	{
+				camAnim.SetBool("Inventory", false);	
 				move(-Input.acceleration.z * Time.deltaTime * movementSpeed * Config.sensitivity);
 			}
 			//turn
@@ -130,7 +144,7 @@ public class Player : MonoBehaviour, iHumanoid
 
 		private void goToInventory(){
 			if (-Input.acceleration.z > 0.8) {
-				camAnim.Play("CamAnim");
+				camAnim.SetBool("Inventory", true);		
 			}
 		}
 
@@ -151,6 +165,7 @@ public class Player : MonoBehaviour, iHumanoid
 		private void updateAppearance(){
 			//TODO: update the Appearance depending on the current action as well as the different mental states
 		}
+
 		#endregion
 
 	#endregion
