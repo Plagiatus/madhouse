@@ -6,6 +6,7 @@ public class Player : MonoBehaviour, iHumanoid
 {
 	#region iHumanoid
     public float movementSpeed{get{return movementSpeed;} set{movementSpeed = value;}}
+	public Animator camAnim;
 
     public void moveTo(Vector2 pos)
     {
@@ -27,6 +28,10 @@ public class Player : MonoBehaviour, iHumanoid
 	private eAction action;
 	private AudioSource micinput;
 	#endregion
+
+	void Start(){
+		camAnim = GetComponent<Animator>();
+	}
 
 	#region UnityMethods
 	void Update(){
@@ -94,8 +99,7 @@ public class Player : MonoBehaviour, iHumanoid
 			float speed = 4.0f;
 			float temp1 = -Input.acceleration.z * Time.deltaTime * speed;
 
-			if (-Input.acceleration.z < 1 && Input.acceleration.z > -1)
-        	{
+			if (-Input.acceleration.z < 0.8 && Input.acceleration.z > -0.7)        	{
 				transform.Translate(0, 0, temp1);
 			}
 		}
@@ -104,29 +108,9 @@ public class Player : MonoBehaviour, iHumanoid
 			transform.Rotate(0, speed * Input.acceleration.x, 0);
 		}
 
-		private void moveCameraBehindPLayer(){
-			RaycastHit hit;
-			Vector3 hitPoint;
-			Vector3 temp1; //globale Variable?
-
-			// !!! muss in die Start(): 
-			temp1 = this.cam.transform.localPosition;
-			
-			Ray ray = new Ray(this.transform.position + Vector3.up * 0.5f, transform.forward * -1);
-			Debug.DrawRay(ray.origin, ray.direction, Color.green, 1);
-			// Debug.Log(Physics.Raycast(ray, out hit, 2.5f));
-			if (Physics.Raycast(ray, out hit, 2.5f)){
-				hitPoint = hit.point;
-				// Debug.Log("hit");
-				// Debug.Log(hitPoint);
-				// worldposition auf lokalposition setzen
-				cam.transform.localPosition = transform.InverseTransformPoint(hitPoint);
-				Debug.Log(cam.transform.localPosition);
-			}
-			// camera auf standard setzen
-			else { 
-				cam.transform.localPosition = temp1; 
-				// Debug.Log("no hit"); 
+		private void goToInventory(){
+			if (-Input.acceleration.z > 0.8) {
+				camAnim.Play("CamAnim");
 			}
 		}
 
