@@ -36,21 +36,7 @@ public class CameraScript : MonoBehaviour {
     }
 
 	void Update() {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            targetSanity = -20;
-            targetDistortion = 50;
-        }
-            
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            targetSanity = 80;
-            targetDistortion = 50;
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            targetSanity = 0;
-        }
+
         sanity = Mathf.Lerp(sanity, targetSanity, Time.deltaTime);
         //Debug.Log("Insanity at " + sanity);
         //Debug.Log("Target Sanity at " + targetSanity);
@@ -202,7 +188,6 @@ public class CameraScript : MonoBehaviour {
         if (currentDistortion < targetDistortion)
         {
             currentDistortion = currentDistortion + distortionGrowth;
-            //currentDistortion = Mathf.Clamp(currentDistortion, 0, PostProConstants.maxDistortion);
         }
         else
         { 
