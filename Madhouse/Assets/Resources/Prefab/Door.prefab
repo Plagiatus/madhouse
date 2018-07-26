@@ -569,4 +569,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openByDefault: 0
-  locked: 1
+  locked: 0
