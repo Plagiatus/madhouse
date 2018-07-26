@@ -56,10 +56,10 @@ MonoBehaviour:
     value: 0
   mask:
     overrideState: 1
-    value: {fileID: 0}
+    value: {fileID: 2800000, guid: 17d7763da53601c46bd8b6047675fd0c, type: 3}
   opacity:
-    overrideState: 0
-    value: 1
+    overrideState: 1
+    value: 0
 --- !u!114 &114609933794409566
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -350,10 +350,10 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 0
+    value: 1
   intensity:
     overrideState: 1
-    value: 0
+    value: 52
   intensityX:
     overrideState: 0
     value: 1
@@ -410,13 +410,13 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 0
+    value: 1
   colored:
     overrideState: 0
     value: 1
   intensity:
     overrideState: 1
-    value: 0
+    value: 0.3
   size:
     overrideState: 1
     value: 1.3
@@ -461,7 +461,7 @@ MonoBehaviour:
     value: 1
   dirtTexture:
     overrideState: 1
-    value: {fileID: 2800000, guid: c960ca73eb30ac149aefa122ade71ffa, type: 3}
+    value: {fileID: 2800000, guid: 17d7763da53601c46bd8b6047675fd0c, type: 3}
   dirtIntensity:
     overrideState: 1
-    value: 0
+    value: 5

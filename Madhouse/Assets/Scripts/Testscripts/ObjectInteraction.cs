@@ -9,7 +9,9 @@ public class ObjectInteraction : MonoBehaviour {
 		if (Input.GetMouseButtonDown(0)){
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
-			if(Physics.Raycast(ray, out hit)){
+            GameObject target = hit.transform.gameObject;
+
+            if (Physics.Raycast(ray, out hit)){
 				if((this.transform.position - hit.transform.position).magnitude < Config.interactionDistance){
 					if(hit.transform.gameObject.GetComponent<Door>() != null){
 						Debug.Log("Door");

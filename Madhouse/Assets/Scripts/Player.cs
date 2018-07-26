@@ -15,6 +15,18 @@ public class Player : MonoBehaviour, iHumanoid
 
 	#region Attributes
 	public GameObject cam;
+	public AudioSource normal;
+	public AudioClip normalM;
+	public AudioSource dep;
+	public AudioClip depM;
+	public AudioSource rage;
+	public AudioClip rageM;
+	public AudioSource invent;
+	public AudioClip inventM;
+	public AudioSource eating;
+	public AudioClip eatingS;
+	public AudioSource heartbeat;
+	public AudioClip heartbeatS;
 	private Dictionary<eSlot, Item> items;
 	[Range(-20,80)]
 	private float sanity;
@@ -47,6 +59,12 @@ public class Player : MonoBehaviour, iHumanoid
 			{eSlot.LEFTPOCKET, new Item("Item2", 80, true)},
 			{eSlot.RIGHTPOCKET, null}
 		};
+		normal.clip = normalM;
+		dep.clip = depM;
+		invent.clip = inventM;
+		heartbeat.clip = heartbeatS;
+		eating.clip = eatingS;
+		rage.clip = rageM;
 	}
 
 	void Update(){
@@ -87,6 +105,7 @@ public class Player : MonoBehaviour, iHumanoid
 
 		public void eat(float nutrition){
 			hunger = Mathf.Clamp(hunger + nutrition, 0, 100);
+			eating.Play();
 		}
 
 		public void sleepForHours(float hours){
@@ -157,6 +176,17 @@ public class Player : MonoBehaviour, iHumanoid
 		 	} else {
 				playerAnimator.SetBool("isWalking",false);
 			} 
+			if (sanity > 0 && sanity < 60) {
+				normal.Play();
+			}
+			else if (sanity < 0){
+				dep.Play();
+				heartbeat.PlayDelayed(5);
+			}
+			else {
+				rage.Play();
+				heartbeat.Play();
+			}
 		}
 
 		private void turn(float speed){
@@ -167,6 +197,7 @@ public class Player : MonoBehaviour, iHumanoid
 			inInventory = true;
 			playerAnimator.SetBool("inInventory", true);
 			cam.GetComponent<CameraScript>().transitionToState(true);
+				invent.Play();	
 		}
 
 		private void InteractWithObject(GameObject go){
