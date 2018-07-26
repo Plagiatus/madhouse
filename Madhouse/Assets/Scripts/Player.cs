@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, iHumanoid
 {
+	[Header("Attributes")]
 	#region iHumanoid
     public float movementSpeed;
+
 
     public void moveTo(Vector2 pos)
     {
@@ -14,6 +16,8 @@ public class Player : MonoBehaviour, iHumanoid
 	#endregion
 
 	#region Attributes
+	public Item[] startItems;
+	[Header("Stuff needed during Runtime")]
 	public GameObject cam;
 	public AudioSource normal;
 	public AudioClip normalM;
@@ -56,11 +60,24 @@ public class Player : MonoBehaviour, iHumanoid
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
-		items = new Dictionary<eSlot, Item>() {
-			{eSlot.HAND, new Item("Item2",10,false)},
-			{eSlot.LEFTPOCKET, new Item("Item1", 80, true)},
-			{eSlot.RIGHTPOCKET, null}
-		};
+		// items = new Dictionary<eSlot, Item>() {
+		// 	{eSlot.HAND, new Item("Item2",10,false)},
+		// 	{eSlot.LEFTPOCKET, new Item("Item1", 80, true)},
+		// 	{eSlot.RIGHTPOCKET, null}
+		// };
+		items = new Dictionary<eSlot, Item>();
+		for(int i = 0; i < 3; i++){
+			eSlot slot = (eSlot) i;
+			if(i < startItems.Length){
+				if(startItems[i].itemname != ""){
+					items.Add(slot, startItems[i]);
+				}
+			}
+			else {
+				items.Add(slot, null);
+			}
+		}
+
 		normal.clip = normalM;
 		dep.clip = depM;
 		invent.clip = inventM;
