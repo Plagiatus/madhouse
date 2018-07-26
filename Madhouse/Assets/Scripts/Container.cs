@@ -4,12 +4,25 @@ using UnityEngine;
 public class Container : MonoBehaviour, iInteractable{
 	protected Dictionary<eSlot, Item> items;
 
+
+	public Item[] startItems;
+
 	void Start(){
-		items = new Dictionary<eSlot, Item>(){
-			{eSlot.CENTER, new Item("Item1",10,false)},
-			{eSlot.LEFT, null},
-			{eSlot.RIGHT, null}
-		};
+		// items = new Dictionary<eSlot, Item>(){
+		// 	{eSlot.CENTER, new Item("Item1",10,false)},
+		// 	{eSlot.LEFT, null},
+		// 	{eSlot.RIGHT, null}
+		// };
+		items= new Dictionary<eSlot, Item>();
+		for(int i = 0; i < startItems.Length; i++){
+			eSlot slot = (eSlot) i + 3;
+			if(startItems[i].itemname != ""){
+				items.Add(slot, startItems[i]);
+			}
+			else {
+				items.Add(slot, null);
+			}
+		}
 	}
 
     public void interact()

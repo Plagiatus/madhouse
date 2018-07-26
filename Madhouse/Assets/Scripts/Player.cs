@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, iHumanoid
 {
+	[Header("Attributes")]
 	#region iHumanoid
     public float movementSpeed;
+
 
     public void moveTo(Vector2 pos)
     {
@@ -14,6 +16,8 @@ public class Player : MonoBehaviour, iHumanoid
 	#endregion
 
 	#region Attributes
+	public Item[] startItems;
+	[Header("Stuff needed during Runtime")]
 	public GameObject cam;
 	public AudioSource normal;
 	public AudioClip normalM;
@@ -27,20 +31,23 @@ public class Player : MonoBehaviour, iHumanoid
 	public AudioClip eatingS;
 	public AudioSource heartbeat;
 	public AudioClip heartbeatS;
+	private List<AudioSource> sounds;
 	private Dictionary<eSlot, Item> items;
 	[Range(-20,80)]
-	private float sanity;
+	private float sanity = 0;
 	[Range(0,100)]
-	private float stability;
+	private float stability = 100;
 	[Range(0,100)]
-	private float hunger;
+	private float hunger = 50;
 	[Range(0,100)]
-	private float sleep;
+	private float sleep = 50;
 	private eAction action;
 	private AudioSource micinput;
 	private Rigidbody rb;
 	private Vector3 defaultCameraPositon;
 	private bool inInventory = false;
+	private int count = 0;
+	private CameraScript camScript;
 
 	// private Animator camAnim;
 	public Animator camAnim;
@@ -50,33 +57,73 @@ public class Player : MonoBehaviour, iHumanoid
 	#region UnityMethods
 	
 	void Start(){
+		camScript = cam.GetComponent<CameraScript>();
 		// camStandard = GetComponent<Animator>();
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
-		items = new Dictionary<eSlot, Item>() {
-			{eSlot.HAND, new Item("Pen1",10,false)},
-			{eSlot.LEFTPOCKET, new Item("Item2", 80, true)},
-			{eSlot.RIGHTPOCKET, null}
-		};
+		// items = new Dictionary<eSlot, Item>() {
+		// 	{eSlot.HAND, new Item("Item2",10,false)},
+		// 	{eSlot.LEFTPOCKET, new Item("Item1", 80, true)},
+		// 	{eSlot.RIGHTPOCKET, null}
+		// };
+		items = new Dictionary<eSlot, Item>();
+		for(int i = 0; i < 3; i++){
+			eSlot slot = (eSlot) i;
+			if(i < startItems.Length){
+				if(startItems[i].itemname != ""){
+					items.Add(slot, startItems[i]);
+				} else {
+					items.Add(slot, null);
+				}
+			}
+			else {
+				items.Add(slot, null);
+			}
+		}
+
 		normal.clip = normalM;
 		dep.clip = depM;
 		invent.clip = inventM;
 		heartbeat.clip = heartbeatS;
 		eating.clip = eatingS;
 		rage.clip = rageM;
+
+		sounds = new List<AudioSource>();
+		AddAllSounds();
 	}
 
 	void Update(){
 		inputManager();
 		updateMentalState();
 		updateAppearance();
+
+		// Debug.Log("hunger: " + hunger + " sleep: " + sleep + " stability: " + stability + " sanity: " + sanity);
 	}
 
 	#endregion
 
 	#region ClassMethods
 		#region publicMethods
+		public float getSanity(){
+			return sanity;
+		}
+		public float getStability(){
+			return stability;
+		}
+
+		public Vector2 getHungerAndSleep(){
+			return new Vector2(hunger, sleep);
+		}
+
+		public void setSanity(float newSanity){
+			this.sanity = Mathf.Clamp(newSanity, -20, 80);
+		}
+
+		public void setStability(float newStability){
+			this.stability = Mathf.Clamp(newStability, 0, 100);
+		}
+
 		public Dictionary<eSlot, Item> getItems(){
 			return items;
 		} 
@@ -117,7 +164,9 @@ public class Player : MonoBehaviour, iHumanoid
 		}
 
 		public void addSanity(float sanity){
-			this.sanity = Mathf.Clamp(this.sanity + sanity, -20, 80);
+			//change severity of effect according to current stability. 50% - 150%
+			this.sanity = Mathf.Clamp(this.sanity + (sanity * (((100 - this.stability)/100) + 0.5f)), -20, 80);
+			camScript.moveSanityTo(sanity);
 		}
 
 		public void slowTime(bool slow){
@@ -132,21 +181,35 @@ public class Player : MonoBehaviour, iHumanoid
 		
 		#region privateMethods
 		private void inputManager(){
+			// Debug.Log(count);
 			//move forward
-			if (-Input.acceleration.z < 0.9)
+			// Debug.Log(count);
+			if (((-Input.acceleration.z < 0.9 && -Input.acceleration.z > 0.1) || Input.acceleration.z > 0.1) && count >= Config.actionChangeThreshold * -1)
         	{
 				// camAnim.SetBool("Inventory", false);	
-				move(-Input.acceleration.z);
+				count = Mathf.Clamp(--count, -1* Config.actionChangeThreshold, Config.actionChangeThreshold);
+				if (count <= Config.actionChangeThreshold *-1){
+					move(-Input.acceleration.z);
+				}
 			}
 
+			if(Input.acceleration.z < 0.1 && Input.acceleration.z > -0.1){
+				playerAnimator.SetBool("isWalking",false);
+				count = 0;
+				inInventory = false;
+				playerAnimator.SetBool("inInventory", false);
+				cam.GetComponent<CameraScript>().transitionToState(false);
+			}
 
+			if (-Input.acceleration.z > 0.9 && count <= Config.actionChangeThreshold)
+        	{
+				// camAnim.SetBool("Inventory", false);
+				count = Mathf.Clamp(++count, -1* Config.actionChangeThreshold, Config.actionChangeThreshold);
+				if (count >= Config.actionChangeThreshold && !inInventory){	
+					goToInventory();
+				}
+			}
 			if(inInventory) return;
-
-			if (-Input.acceleration.z > 0.9)
-        	{
-				// camAnim.SetBool("Inventory", false);	
-				goToInventory();
-			}
 			//turn
 			turn(Input.acceleration.x * Config.sensitivity * movementSpeed);
 
@@ -168,25 +231,36 @@ public class Player : MonoBehaviour, iHumanoid
 			cam.GetComponent<CameraScript>().transitionToState(false);
 
 			//TODO: rewrite to use rigidbody
-			if(distance > 0.1 || distance < -0.1){
+			// if(distance > 0.1 || distance < -0.1){
 				playerAnimator.SetBool("isWalking",true);
 				transform.Translate(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
 				// rb.AddRelativeForce(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
 				
-		 	} else {
-				playerAnimator.SetBool("isWalking",false);
-			} 
-			if (sanity > 0 && sanity < 60) {
-				normal.Play();
-			}
-			else if (sanity < 0){
-				dep.Play();
-				heartbeat.PlayDelayed(5);
-			}
-			else {
-				rage.Play();
-				heartbeat.Play();
-			}
+		 	// } else {
+			// 	playerAnimator.SetBool("isWalking",false);
+			// } 
+
+			// if (sanity > 0 && sanity < 60) {
+			// 	foreach(AudioSource aud in sounds){
+			// 		aud.volume = 0;
+			// 	}
+			// 	normal.volume = 1;
+			// }
+			// else if (sanity < 0){
+			// 	foreach(AudioSource aud in sounds){
+			// 		aud.volume = 0;
+			// 	}
+			// 	dep.volume = 0.8f;
+			// 	heartbeat.volume = 1;
+			// 	heartbeat.PlayDelayed(5);
+			// }
+			// else {
+			// 	foreach(AudioSource aud in sounds){
+			// 		aud.volume = 0;
+			// 	}
+			// 	rage.volume = 0.8f;
+			// 	heartbeat.volume = 1;
+			// }
 		}
 
 		private void turn(float speed){
@@ -197,7 +271,7 @@ public class Player : MonoBehaviour, iHumanoid
 			inInventory = true;
 			playerAnimator.SetBool("inInventory", true);
 			cam.GetComponent<CameraScript>().transitionToState(true);
-				invent.Play();	
+			invent.Play();
 		}
 
 		private void InteractWithObject(GameObject go){
@@ -211,11 +285,25 @@ public class Player : MonoBehaviour, iHumanoid
 		}
 
 		private void updateMentalState(){
+			movementSpeed = Mathf.Lerp(movementSpeed, Config.basicMovementSpeed, Time.deltaTime);
 			//TODO: update the hunger, sleep, stability and sanity every frame
+			camScript.moveSanityTo(this.sanity);
 		}
 
 		private void updateAppearance(){
 			//TODO: update the Appearance depending on the current action as well as the different mental states
+		}
+
+		private void AddAllSounds(){
+			sounds.Add(normal);
+			sounds.Add(dep);
+			sounds.Add(rage);
+			sounds.Add(invent);
+			sounds.Add(heartbeat);
+			foreach(AudioSource aud in sounds){
+				aud.volume = 0;
+			}
+			normal.volume = 1;
 		}
 
 		#endregion

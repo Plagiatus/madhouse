@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4956254404404574}
   - component: {fileID: 33558296216414360}
   - component: {fileID: 23530880392810736}
+  - component: {fileID: 65785127529886394}
   m_Layer: 0
   m_Name: Sofa.1
   m_TagString: Untagged
@@ -83,3 +84,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1941706461942992}
   m_Mesh: {fileID: 4300000, guid: 35d558844c6d4bd4099115e71679ca77, type: 3}
+--- !u!65 &65785127529886394
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941706461942992}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.053006895, y: 0.025660817, z: 0.02344412}
+  m_Center: {x: 0.00054420624, y: 0.0008635442, z: 0.0019124579}

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4908003151982138}
   - component: {fileID: 33742775611049168}
   - component: {fileID: 23588831780692856}
+  - component: {fileID: 65924611669093156}
   m_Layer: 0
   m_Name: chukies_01
   m_TagString: Untagged
@@ -83,3 +84,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1015163323373248}
   m_Mesh: {fileID: 4300024, guid: ec40b66161fcdf5458ccee83032f58c3, type: 3}
+--- !u!65 &65924611669093156
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1015163323373248}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0020424777, y: 0.0062645543, z: 0.009203713}
+  m_Center: {x: 0, y: 0, z: 0.0046018567}

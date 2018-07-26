@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4080401792140322}
   - component: {fileID: 33350176605225890}
   - component: {fileID: 23248429391722130}
+  - component: {fileID: 65963155485568700}
   m_Layer: 0
   m_Name: BathSink
   m_TagString: Untagged
@@ -83,3 +84,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1164953528318522}
   m_Mesh: {fileID: 4300000, guid: 3126f881a886f8144bb2e36e85d0c390, type: 3}
+--- !u!65 &65963155485568700
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1164953528318522}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.019816635, y: 0.033909753, z: 0.012988915}
+  m_Center: {x: -0.00008216735, y: -0.0026560738, z: 0.0021334046}
