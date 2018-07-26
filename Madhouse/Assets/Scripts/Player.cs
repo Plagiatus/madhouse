@@ -42,7 +42,6 @@ public class Player : MonoBehaviour, iHumanoid
 	private Vector3 defaultCameraPositon;
 	private bool inInventory = false;
 	private int count = 0;
-	private int thr = 25;
 
 
 	// private Animator camAnim;
@@ -135,27 +134,35 @@ public class Player : MonoBehaviour, iHumanoid
 		
 		#region privateMethods
 		private void inputManager(){
+			// Debug.Log(count);
 			//move forward
-			if (-Input.acceleration.z < 0.9 && count > thr *= -1)
+			// Debug.Log(count);
+			if (((-Input.acceleration.z < 0.9 && -Input.acceleration.z > 0.1) || Input.acceleration.z > 0.1) && count >= Config.actionChangeThreshold * -1)
         	{
 				// camAnim.SetBool("Inventory", false);	
-				count --;
-				if (count < thr *=-1){
+				count = Mathf.Clamp(--count, -1* Config.actionChangeThreshold, Config.actionChangeThreshold);
+				if (count <= Config.actionChangeThreshold *-1){
 					move(-Input.acceleration.z);
 				}
 			}
 
+			if(Input.acceleration.z < 0.1 && Input.acceleration.z > -0.1){
+				playerAnimator.SetBool("isWalking",false);
+				count = 0;
+				inInventory = false;
+				playerAnimator.SetBool("inInventory", false);
+				cam.GetComponent<CameraScript>().transitionToState(false);
+			}
 
-			if(inInventory) return;
-
-			if (-Input.acceleration.z > 0.9 && count < thr)
+			if (-Input.acceleration.z > 0.9 && count <= Config.actionChangeThreshold)
         	{
 				// camAnim.SetBool("Inventory", false);
-				count ++;
-				if (count > thr){	
+				count = Mathf.Clamp(++count, -1* Config.actionChangeThreshold, Config.actionChangeThreshold);
+				if (count >= Config.actionChangeThreshold && !inInventory){	
 					goToInventory();
 				}
 			}
+			if(inInventory) return;
 			//turn
 			turn(Input.acceleration.x * Config.sensitivity * movementSpeed);
 
@@ -177,14 +184,14 @@ public class Player : MonoBehaviour, iHumanoid
 			cam.GetComponent<CameraScript>().transitionToState(false);
 
 			//TODO: rewrite to use rigidbody
-			if(distance > 0.1 || distance < -0.1){
+			// if(distance > 0.1 || distance < -0.1){
 				playerAnimator.SetBool("isWalking",true);
 				transform.Translate(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
 				// rb.AddRelativeForce(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
 				
-		 	} else {
-				playerAnimator.SetBool("isWalking",false);
-			} 
+		 	// } else {
+			// 	playerAnimator.SetBool("isWalking",false);
+			// } 
 			// if (sanity > 0 && sanity < 60) {
 			// 	normal.Play();
 			// }
