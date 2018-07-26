@@ -40,17 +40,17 @@ public class Player : MonoBehaviour, iHumanoid
 	private AudioSource micinput;
 	private Rigidbody rb;
 	private Vector3 defaultCameraPositon;
+	private bool inInventory = false;
 
 	// private Animator camAnim;
-	public Animator camStandard;
+	public Animator camAnim;
 	public Animator playerAnimator;
 	#endregion
 
 	#region UnityMethods
 	
 	void Start(){
-		// camAnim = GetComponent<Animator>();
-		camStandard = GetComponent<Animator>();
+		// camStandard = GetComponent<Animator>();
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
@@ -133,10 +133,19 @@ public class Player : MonoBehaviour, iHumanoid
 		#region privateMethods
 		private void inputManager(){
 			//move forward
-			if (-Input.acceleration.z < 0.8)
+			if (-Input.acceleration.z < 0.9)
         	{
 				// camAnim.SetBool("Inventory", false);	
-				move(-Input.acceleration.z * Time.deltaTime * movementSpeed * Config.sensitivity);
+				move(-Input.acceleration.z);
+			}
+
+
+			if(inInventory) return;
+
+			if (-Input.acceleration.z > 0.9)
+        	{
+				// camAnim.SetBool("Inventory", false);	
+				goToInventory();
 			}
 			//turn
 			turn(Input.acceleration.x * Config.sensitivity * movementSpeed);
@@ -154,8 +163,19 @@ public class Player : MonoBehaviour, iHumanoid
 		}
 
 		private void move(float distance){
+			inInventory = false;
+			playerAnimator.SetBool("inInventory", false);
+			cam.GetComponent<CameraScript>().transitionToState(false);
+
 			//TODO: rewrite to use rigidbody
-			transform.Translate(0, 0, distance);
+			if(distance > 0.1 || distance < -0.1){
+				playerAnimator.SetBool("isWalking",true);
+				transform.Translate(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
+				// rb.AddRelativeForce(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
+				
+		 	} else {
+				playerAnimator.SetBool("isWalking",false);
+			} 
 			if (sanity > 0 && sanity < 60) {
 				normal.Play();
 			}
@@ -174,10 +194,10 @@ public class Player : MonoBehaviour, iHumanoid
 		}
 
 		private void goToInventory(){
-			if (-Input.acceleration.z > 0.8) {
-				// camAnim.SetBool("Inventory", true);	
+			inInventory = true;
+			playerAnimator.SetBool("inInventory", true);
+			cam.GetComponent<CameraScript>().transitionToState(true);
 				invent.Play();	
-			}
 		}
 
 		private void InteractWithObject(GameObject go){
