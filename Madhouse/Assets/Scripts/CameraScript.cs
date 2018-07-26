@@ -88,12 +88,13 @@ public class CameraScript : MonoBehaviour {
 			// inTransition = true;
 			animator.SetBool("inInventory", false);
 			inInventory = false;
+            GetComponent<ItemDragHandler>().enabled = false;
 		}
 	}
 
     public void inwardDone(){
         inTransition = false;
-        //TODO: enable inventory here
+        GetComponent<ItemDragHandler>().enabled = true;
     }
 
     public void outwardsDone(){

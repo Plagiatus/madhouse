@@ -55,8 +55,8 @@ public class Player : MonoBehaviour, iHumanoid
 		rb = GetComponent<Rigidbody>();
 		defaultCameraPositon = cam.transform.position;
 		items = new Dictionary<eSlot, Item>() {
-			{eSlot.HAND, new Item("Pen1",10,false)},
-			{eSlot.LEFTPOCKET, new Item("Item2", 80, true)},
+			{eSlot.HAND, new Item("Item2",10,false)},
+			{eSlot.LEFTPOCKET, new Item("Item1", 80, true)},
 			{eSlot.RIGHTPOCKET, null}
 		};
 		normal.clip = normalM;
@@ -176,17 +176,17 @@ public class Player : MonoBehaviour, iHumanoid
 		 	} else {
 				playerAnimator.SetBool("isWalking",false);
 			} 
-			if (sanity > 0 && sanity < 60) {
-				normal.Play();
-			}
-			else if (sanity < 0){
-				dep.Play();
-				heartbeat.PlayDelayed(5);
-			}
-			else {
-				rage.Play();
-				heartbeat.Play();
-			}
+			// if (sanity > 0 && sanity < 60) {
+			// 	normal.Play();
+			// }
+			// else if (sanity < 0){
+			// 	dep.Play();
+			// 	heartbeat.PlayDelayed(5);
+			// }
+			// else {
+			// 	rage.Play();
+			// 	heartbeat.Play();
+			// }
 		}
 
 		private void turn(float speed){
@@ -197,7 +197,7 @@ public class Player : MonoBehaviour, iHumanoid
 			inInventory = true;
 			playerAnimator.SetBool("inInventory", true);
 			cam.GetComponent<CameraScript>().transitionToState(true);
-				invent.Play();	
+			invent.Play();	
 		}
 
 		private void InteractWithObject(GameObject go){

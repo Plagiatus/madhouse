@@ -38,6 +38,8 @@ public class ItemDragHandler : MonoBehaviour {
 				Destroy(go);
 			}
 		}
+		transform.Find("Container").gameObject.SetActive(false);
+		transform.Find("Player").gameObject.SetActive(false);
 	}
 
 	void createItems(){
@@ -53,6 +55,8 @@ public class ItemDragHandler : MonoBehaviour {
 				newItem.transform.position = GameObject.Find(Config.enumToNameString(pair.Key)).transform.position + Vector3.up * newItem.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
 				newItem.GetComponent<Item_Mono>().itemname = pair.Value.itemname;
 				newItem.transform.parent = this.transform;
+				newItem.layer = 10;
+				newItem.tag = "Item";
 			}
 		}
 	}
@@ -79,6 +83,7 @@ public class ItemDragHandler : MonoBehaviour {
 			RaycastHit hitInfo;
 			target = GetClickedObject(out hitInfo);
 			if(target != null && target.gameObject.tag == "Item"){
+				// Debug.Log(target.name);
 				if(GetClickedSlot(out hitInfo) != null) originSlot = Config.gameObjectToEnum(GetClickedSlot(out hitInfo));
 				isDragging = true;
 				originalTargetPosition = target.transform.position;
@@ -105,7 +110,6 @@ public class ItemDragHandler : MonoBehaviour {
 							if(go.GetComponent<Item_Mono>() != null){
 								if(go.GetComponent<Item_Mono>().itemname == player.getItems()[currentSlot].itemname){
 									go.transform.position = GameObject.Find(Config.enumToNameString(originSlot)).transform.position + Vector3.up * target.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
-									Debug.Log(go.transform.position.y);
 									break;
 								}
 							}
@@ -117,13 +121,14 @@ public class ItemDragHandler : MonoBehaviour {
 							if(go.GetComponent<Item_Mono>() != null){
 								if(go.GetComponent<Item_Mono>().itemname == container.getItems()[currentSlot].itemname){
 									go.transform.position = GameObject.Find(Config.enumToNameString(originSlot)).transform.position + Vector3.up * target.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
-									Debug.Log(go.transform.position.y);
 									break;
 								}
 							}
 						}
 					}
 				}
+
+				Debug.Log("from: " + originSlot + " to: " + currentSlot);
 
 				//if both items are inside the player inventory
 				if(Config.isPlayerSlot(currentSlot) && Config.isPlayerSlot(originSlot)){
@@ -147,6 +152,8 @@ public class ItemDragHandler : MonoBehaviour {
 				}
 
 				target.transform.position = hit.collider.transform.position + Vector3.up * target.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
+				// PrintInventory();
+
 			} else {
 				target.transform.position = originalTargetPosition;
 			}
@@ -173,10 +180,22 @@ public class ItemDragHandler : MonoBehaviour {
 	GameObject GetClickedObject(out RaycastHit hit){
 		GameObject t = null;
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if(Physics.Raycast(ray, out hit)){
+		int layerMask = 1 << 10;
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
 			t = hit.collider.gameObject;
 		}
 
 		return t;
+	}
+
+	void PrintInventory(){
+		string output = "";
+
+		foreach(KeyValuePair<eSlot, Item> pair in player.getItems()){
+			if(pair.Value != null)
+			output += pair.Key + ": " + pair.Value.itemname + " - ";
+		}
+
+		Debug.Log(output);
 	}
 }
