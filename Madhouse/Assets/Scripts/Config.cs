@@ -12,6 +12,7 @@ public static class Config {
 	public static float interactionDistance = 2;
 	
 	public static int actionChangeThreshold = 10;
+	public static float basicMovementSpeed = 4;
 
 
 	//Dictionary of what needs to be the mental state before an action can be done. (stability, sanity)

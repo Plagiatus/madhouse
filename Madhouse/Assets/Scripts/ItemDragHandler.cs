@@ -214,6 +214,7 @@ public class ItemDragHandler : MonoBehaviour {
 		   cons.interact(player);
 		   player.playerAnimator.SetTrigger("consume");
 		   Destroy(target);
+
 	   }
     }
 

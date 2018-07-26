@@ -46,7 +46,7 @@ public class Player : MonoBehaviour, iHumanoid
 	private Vector3 defaultCameraPositon;
 	private bool inInventory = false;
 	private int count = 0;
-
+	private CameraScript camScript;
 
 	// private Animator camAnim;
 	public Animator camAnim;
@@ -56,6 +56,7 @@ public class Player : MonoBehaviour, iHumanoid
 	#region UnityMethods
 	
 	void Start(){
+		camScript = cam.GetComponent<CameraScript>();
 		// camStandard = GetComponent<Animator>();
 		movementSpeed = 4f;
 		rb = GetComponent<Rigidbody>();
@@ -93,13 +94,32 @@ public class Player : MonoBehaviour, iHumanoid
 		updateMentalState();
 		updateAppearance();
 
-		Debug.Log("hunger: " + hunger + " sleep: " + sleep + " stability: " + stability + " sanity: " + sanity);
+		// Debug.Log("hunger: " + hunger + " sleep: " + sleep + " stability: " + stability + " sanity: " + sanity);
 	}
 
 	#endregion
 
 	#region ClassMethods
 		#region publicMethods
+		public float getSanity(){
+			return sanity;
+		}
+		public float getStability(){
+			return stability;
+		}
+
+		public Vector2 getHungerAndSleep(){
+			return new Vector2(hunger, sleep);
+		}
+
+		public void setSanity(float newSanity){
+			this.sanity = Mathf.Clamp(newSanity, -20, 80);
+		}
+
+		public void setStability(float newStability){
+			this.stability = Mathf.Clamp(newStability, 0, 100);
+		}
+
 		public Dictionary<eSlot, Item> getItems(){
 			return items;
 		} 
@@ -142,6 +162,7 @@ public class Player : MonoBehaviour, iHumanoid
 		public void addSanity(float sanity){
 			//change severity of effect according to current stability. 50% - 150%
 			this.sanity = Mathf.Clamp(this.sanity + (sanity * (((100 - this.stability)/100) + 0.5f)), -20, 80);
+			camScript.moveSanityTo(sanity);
 		}
 
 		public void slowTime(bool slow){
@@ -249,7 +270,9 @@ public class Player : MonoBehaviour, iHumanoid
 		}
 
 		private void updateMentalState(){
+			movementSpeed = Mathf.Lerp(movementSpeed, Config.basicMovementSpeed, Time.deltaTime);
 			//TODO: update the hunger, sleep, stability and sanity every frame
+			camScript.moveSanityTo(this.sanity);
 		}
 
 		private void updateAppearance(){
