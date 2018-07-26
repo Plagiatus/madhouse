@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProximityTest2 : MonoBehaviour {
+public class ProximityOutlineObject : MonoBehaviour {
 
 	float cooldown = 1;
 	float timer = 0;
@@ -15,6 +15,7 @@ public class ProximityTest2 : MonoBehaviour {
 	}
 
 	void Update () {
+		Debug.Log(intensity);
 		outline.OutlineWidth = intensity;
 		// outline.OutlineColor = new Color(1, 1, 1, intensity / 100);
 	}
