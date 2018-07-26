@@ -22,7 +22,7 @@ public class CameraScript : MonoBehaviour {
     public Texture Insanity_Effect;
 
     private float currentDistortion;
-    private float targetDistortion;
+    public float targetDistortion;
     private float distortionThreshhold = 0.1f;
     private float distortionGrowth = 1f;
     private Animator animator;

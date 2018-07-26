@@ -20,5 +20,10 @@ public class Consumable : Item_Mono {
 		p.sleepForHours(effectOnSleep);
 		p.addStability(effectOnStability);
 		p.addSanity(effectOnSanity);
+		
+		//for the effects
+		p.cam.GetComponent<CameraScript>().targetDistortion = effectOnSanity;
+		p.movementSpeed *= (effectOnSanity / 10); 
+		
 	}
 }
