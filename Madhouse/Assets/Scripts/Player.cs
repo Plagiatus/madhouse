@@ -41,6 +41,9 @@ public class Player : MonoBehaviour, iHumanoid
 	private Rigidbody rb;
 	private Vector3 defaultCameraPositon;
 	private bool inInventory = false;
+	private int count = 0;
+	private int thr = 25;
+
 
 	// private Animator camAnim;
 	public Animator camAnim;
@@ -133,19 +136,25 @@ public class Player : MonoBehaviour, iHumanoid
 		#region privateMethods
 		private void inputManager(){
 			//move forward
-			if (-Input.acceleration.z < 0.9)
+			if (-Input.acceleration.z < 0.9 && count > thr *= -1)
         	{
 				// camAnim.SetBool("Inventory", false);	
-				move(-Input.acceleration.z);
+				count --;
+				if (count < thr *=-1){
+					move(-Input.acceleration.z);
+				}
 			}
 
 
 			if(inInventory) return;
 
-			if (-Input.acceleration.z > 0.9)
+			if (-Input.acceleration.z > 0.9 && count < thr)
         	{
-				// camAnim.SetBool("Inventory", false);	
-				goToInventory();
+				// camAnim.SetBool("Inventory", false);
+				count ++;
+				if (count > thr){	
+					goToInventory();
+				}
 			}
 			//turn
 			turn(Input.acceleration.x * Config.sensitivity * movementSpeed);
