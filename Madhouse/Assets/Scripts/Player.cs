@@ -31,6 +31,7 @@ public class Player : MonoBehaviour, iHumanoid
 	public AudioClip eatingS;
 	public AudioSource heartbeat;
 	public AudioClip heartbeatS;
+	private List<AudioSource> sounds;
 	private Dictionary<eSlot, Item> items;
 	[Range(-20,80)]
 	private float sanity;
@@ -84,6 +85,9 @@ public class Player : MonoBehaviour, iHumanoid
 		heartbeat.clip = heartbeatS;
 		eating.clip = eatingS;
 		rage.clip = rageM;
+
+		sounds = new List<AudioSource>();
+		AddAllSounds();
 	}
 
 	void Update(){
@@ -209,16 +213,27 @@ public class Player : MonoBehaviour, iHumanoid
 		 	// } else {
 			// 	playerAnimator.SetBool("isWalking",false);
 			// } 
+
 			// if (sanity > 0 && sanity < 60) {
-			// 	normal.Play();
+			// 	foreach(AudioSource aud in sounds){
+			// 		aud.volume = 0;
+			// 	}
+			// 	normal.volume = 1;
 			// }
 			// else if (sanity < 0){
-			// 	dep.Play();
+			// 	foreach(AudioSource aud in sounds){
+			// 		aud.volume = 0;
+			// 	}
+			// 	dep.volume = 0.8f;
+			// 	heartbeat.volume = 1;
 			// 	heartbeat.PlayDelayed(5);
 			// }
 			// else {
-			// 	rage.Play();
-			// 	heartbeat.Play();
+			// 	foreach(AudioSource aud in sounds){
+			// 		aud.volume = 0;
+			// 	}
+			// 	rage.volume = 0.8f;
+			// 	heartbeat.volume = 1;
 			// }
 		}
 
@@ -249,6 +264,18 @@ public class Player : MonoBehaviour, iHumanoid
 
 		private void updateAppearance(){
 			//TODO: update the Appearance depending on the current action as well as the different mental states
+		}
+
+		private void AddAllSounds(){
+			sounds.Add(normal);
+			sounds.Add(dep);
+			sounds.Add(rage);
+			sounds.Add(invent);
+			sounds.Add(heartbeat);
+			foreach(AudioSource aud in sounds){
+				aud.volume = 0;
+			}
+			normal.volume = 1;
 		}
 
 		#endregion
