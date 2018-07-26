@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4374115031228638}
   - component: {fileID: 33553638569065442}
   - component: {fileID: 23800789123256448}
+  - component: {fileID: 65366890330305556}
   m_Layer: 0
   m_Name: bowl_01
   m_TagString: Untagged
@@ -83,3 +84,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1875725024528438}
   m_Mesh: {fileID: 4300026, guid: ec40b66161fcdf5458ccee83032f58c3, type: 3}
+--- !u!65 &65366890330305556
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1875725024528438}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0030842589, y: 0.0030842598, z: 0.001899442}
+  m_Center: {x: 0, y: 1.7462302e-10, z: -0.000081279046}
