@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class NPC : MonoBehaviour, iHumanoid {
+
     public float movementSpeed
     {
         get
@@ -26,6 +27,7 @@ public abstract class NPC : MonoBehaviour, iHumanoid {
 	protected Mesh model;
 	protected Mesh distortedModel;
 	protected eState state;
+    public bool AIEnabled;
 	[Range(0,5)]
 	protected int resistance;
 	protected AudioListener al;
