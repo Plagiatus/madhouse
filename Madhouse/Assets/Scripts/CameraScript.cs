@@ -8,7 +8,7 @@ public class CameraScript : MonoBehaviour {
 	public GameObject player;
 
 	private Vector3 offset;
-	private bool inInventory = false;
+	public bool inInventory = false;
 	private bool inTransition = false;
 	[Range(-20,80)]
 	private float sanity;
@@ -25,6 +25,7 @@ public class CameraScript : MonoBehaviour {
     private float targetDistortion;
     private float distortionThreshhold = 0.1f;
     private float distortionGrowth = 1f;
+    private Animator animator;
 
     void Start () {
 		offset = this.transform.position - player.transform.position;
@@ -33,6 +34,7 @@ public class CameraScript : MonoBehaviour {
         temp1 = this.transform.localPosition;
         currentBloomIntensity = PostProConstants.bloom_IntesityNormal;
         currentDirtIntensity = PostProConstants.dirt_IntesityNormal;
+        animator = GetComponent<Animator>();
     }
 
 	void Update() {
@@ -41,41 +43,63 @@ public class CameraScript : MonoBehaviour {
         //Debug.Log("Insanity at " + sanity);
         //Debug.Log("Target Sanity at " + targetSanity);
         distortImage();
+        // moveCameraBehindPlayer();
 	}
 
-	private void moveCameraBehindPLayer(){
-			RaycastHit hit;
-			Vector3 hitPoint;
-			
-			Ray ray = new Ray(player.transform.position + Vector3.up * 0.5f, player.transform.forward * -1);
-			Debug.DrawRay(ray.origin, ray.direction, Color.green, 1);
-			// Debug.Log(Physics.Raycast(ray, out hit, 2.5f));
-			if (Physics.Raycast(ray, out hit, 2.5f)){
-				hitPoint = hit.point;
-				// Debug.Log("hit");
-				// Debug.Log(hitPoint);
-				// worldposition auf lokalposition setzen
-				player.transform.localPosition = this.transform.InverseTransformPoint(hitPoint);
-				//Debug.Log(player.transform.localPosition);
-			}
-			// camera auf standard setzen
-			else { 
-				player.transform.localPosition = temp1; 
-				// Debug.Log("no hit"); 
-			}
-		}
+    void FixedUpdate(){
+        moveCameraBehindPlayer();
+    }
+
+	private void moveCameraBehindPlayer(){
+        if(inInventory) return;
+        // Debug.Log("moveCam");
+        RaycastHit hit;
+        Vector3 hitPoint;
+        
+        Vector3 rayDirection = (player.transform.forward * -1);
+        Ray ray = new Ray(player.transform.position + Vector3.up * 1.4f + player.transform.right, Quaternion.AngleAxis(15, player.transform.right) * rayDirection);
+        // Debug.DrawRay(ray.origin, ray.direction, Color.green, 1);
+        // Debug.Log(ray.direction);
+        // Debug.Log(Physics.Raycast(ray, out hit, 2.5f));
+        if (Physics.Raycast(ray, out hit, 2.5f)){
+            hitPoint = hit.point;
+            // Debug.Log("hit");
+            // Debug.Log(hitPoint);
+            // worldposition auf lokalposition setzen
+            // this.transform.position = hitPoint;
+            // Debug.Log(this.transform.localPosition);
+            this.transform.localPosition = player.transform.InverseTransformPoint(hitPoint);
+            //Debug.Log(player.transform.localPosition);
+        }
+        // camera auf standard setzen
+        else { 
+            this.transform.localPosition = temp1; 
+            // Debug.Log("no hit"); 
+        }
+    }
 
 	public void transitionToState(bool toInventory){
-		if(toInventory && !inInventory && !inTransition){
-			inTransition = true;
-			//TODO: move to Inventory view, maybe a Coroutine or Animation.
+		if(toInventory && !inInventory){
+			// inTransition = true;
+			animator.SetBool("inInventory", true);
+            animator.applyRootMotion = false;
 			inInventory = true;
-		} else if (!toInventory && inInventory && !inTransition) {
-			inTransition = true;
-			//TODO: move back to normal view, maybe via Coroutine or Animation
+		} else if (!toInventory && inInventory) {
+			// inTransition = true;
+			animator.SetBool("inInventory", false);
 			inInventory = false;
 		}
 	}
+
+    public void inwardDone(){
+        inTransition = false;
+        //TODO: enable inventory here
+    }
+
+    public void outwardsDone(){
+        inTransition = false;
+        animator.applyRootMotion = true;
+    }
 
 	private void distortImage(){
         float sanityPerc;
