@@ -34,13 +34,13 @@ public class Player : MonoBehaviour, iHumanoid
 	private List<AudioSource> sounds;
 	private Dictionary<eSlot, Item> items;
 	[Range(-20,80)]
-	private float sanity;
+	private float sanity = 0;
 	[Range(0,100)]
-	private float stability;
+	private float stability = 100;
 	[Range(0,100)]
-	private float hunger;
+	private float hunger = 50;
 	[Range(0,100)]
-	private float sleep;
+	private float sleep = 50;
 	private eAction action;
 	private AudioSource micinput;
 	private Rigidbody rb;
@@ -72,6 +72,8 @@ public class Player : MonoBehaviour, iHumanoid
 			if(i < startItems.Length){
 				if(startItems[i].itemname != ""){
 					items.Add(slot, startItems[i]);
+				} else {
+					items.Add(slot, null);
 				}
 			}
 			else {
@@ -94,6 +96,8 @@ public class Player : MonoBehaviour, iHumanoid
 		inputManager();
 		updateMentalState();
 		updateAppearance();
+
+		Debug.Log("hunger: " + hunger + " sleep: " + sleep + " stability: " + stability + " sanity: " + sanity);
 	}
 
 	#endregion
@@ -140,7 +144,8 @@ public class Player : MonoBehaviour, iHumanoid
 		}
 
 		public void addSanity(float sanity){
-			this.sanity = Mathf.Clamp(this.sanity + sanity, -20, 80);
+			//change severity of effect according to current stability. 50% - 150%
+			this.sanity = Mathf.Clamp(this.sanity + (sanity * (((100 - this.stability)/100) + 0.5f)), -20, 80);
 		}
 
 		public void slowTime(bool slow){

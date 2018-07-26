@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4018451733846692}
   - component: {fileID: 33073177542333542}
   - component: {fileID: 23482114247646280}
+  - component: {fileID: 65132066798223928}
   m_Layer: 0
   m_Name: knife_01
   m_TagString: Untagged
@@ -83,3 +84,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1992204959969044}
   m_Mesh: {fileID: 4300082, guid: ec40b66161fcdf5458ccee83032f58c3, type: 3}
+--- !u!65 &65132066798223928
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1992204959969044}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.005215758, y: 0.066927485, z: 0.0019995153}
+  m_Center: {x: -0.00000004377216, y: 0.0000000055879337, z: 0.000000003492458}

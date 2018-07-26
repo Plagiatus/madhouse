@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ public class ItemDragHandler : MonoBehaviour {
 	Dictionary<eSlot, Item> items;
 
 	eSlot originSlot;
+
+	float timer = 0;
 
 	void OnEnable () {
 		container = null;
@@ -104,21 +107,30 @@ public class ItemDragHandler : MonoBehaviour {
 	}
 
 	void Update () {
-
+		timer += Time.deltaTime;
 		//START DRAG
 		if(Input.GetMouseButtonDown(0)){
 			RaycastHit hitInfo;
 			target = GetClickedObject(out hitInfo);
 			if(target != null && target.gameObject.tag == "Item"){
 				if(GetClickedSlot(out hitInfo) != null) originSlot = Config.gameObjectToEnum(GetClickedSlot(out hitInfo));
-				// Debug.Log("origin: " + originSlot);
-				isDragging = true;
-				originalTargetPosition = target.transform.position;
-				positionOfScreen = Camera.main.WorldToScreenPoint(target.transform.position);
-				offsetValue = target.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, positionOfScreen.z));
+				if(timer > 0.2){
+					// Debug.Log("origin: " + originSlot);
+					isDragging = true;
+					originalTargetPosition = target.transform.position;
+					positionOfScreen = Camera.main.WorldToScreenPoint(target.transform.position);
+					offsetValue = target.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, positionOfScreen.z));
+				} else {
+					//Doubleclick
+					if(originSlot == eSlot.HAND){
+						useItem(target);
+						player.takeItem(originSlot);
+					}
+				}
 			} else {
 				target = null;
 			}
+			timer = 0;
 		}
 
 		//DROP
@@ -195,7 +207,17 @@ public class ItemDragHandler : MonoBehaviour {
 		
 	}
 
-	GameObject GetClickedSlot(out RaycastHit hit){
+    private void useItem(GameObject target)
+    {
+       if(target.GetComponent<Consumable>() != null){
+		   Consumable cons = target.GetComponent<Consumable>();
+		   cons.interact(player);
+		   player.playerAnimator.SetTrigger("consume");
+		   Destroy(target);
+	   }
+    }
+
+    GameObject GetClickedSlot(out RaycastHit hit){
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		int layerMask = 1 << 9;
 		GameObject t = null;
