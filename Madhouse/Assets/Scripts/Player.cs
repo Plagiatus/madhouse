@@ -197,7 +197,7 @@ public class Player : MonoBehaviour, iHumanoid
 			inInventory = true;
 			playerAnimator.SetBool("inInventory", true);
 			cam.GetComponent<CameraScript>().transitionToState(true);
-			invent.Play();	
+			invent.Play();
 		}
 
 		private void InteractWithObject(GameObject go){

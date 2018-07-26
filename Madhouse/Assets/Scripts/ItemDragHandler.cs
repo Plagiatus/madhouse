@@ -28,6 +28,8 @@ public class ItemDragHandler : MonoBehaviour {
 			{eSlot.RIGHTPOCKET, playerItems[eSlot.RIGHTPOCKET]}
 		};
 
+		checkForContainer();
+
 		createItems();
 	}
 
@@ -40,6 +42,27 @@ public class ItemDragHandler : MonoBehaviour {
 		}
 		transform.Find("Container").gameObject.SetActive(false);
 		transform.Find("Player").gameObject.SetActive(false);
+	}
+
+	void checkForContainer(){
+		GameObject closestCollider = null;
+		Collider[] closeColliders = Physics.OverlapSphere(player.transform.position, Config.interactionDistance);
+		foreach(Collider c in closeColliders){
+			if(c.gameObject.GetComponent<Container>() != null){
+				if(closestCollider != null){
+					if((player.transform.position - c.gameObject.transform.position).sqrMagnitude < (player.transform.position - closestCollider.transform.position).sqrMagnitude){
+						closestCollider = c.gameObject;
+					}
+				} else {
+					closestCollider = c.gameObject;
+				}
+			}
+		}
+
+		if(closestCollider != null){
+			addContainer(closestCollider.GetComponent<Container>());
+			player.transform.LookAt(new Vector3(closestCollider.transform.position.x, player.transform.position.y, closestCollider.transform.position.z ));
+		}
 	}
 
 	void createItems(){
@@ -55,6 +78,7 @@ public class ItemDragHandler : MonoBehaviour {
 				newItem.transform.position = GameObject.Find(Config.enumToNameString(pair.Key)).transform.position + Vector3.up * newItem.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
 				newItem.GetComponent<Item_Mono>().itemname = pair.Value.itemname;
 				newItem.transform.parent = this.transform;
+				newItem.transform.rotation = player.transform.rotation;
 				newItem.layer = 10;
 				newItem.tag = "Item";
 			}
@@ -64,16 +88,19 @@ public class ItemDragHandler : MonoBehaviour {
 	public void addContainer(Container co){
 		container = co;
 		activateContainer();
-		createItems();
 	}
 
 	void activateContainer(){
 		transform.Find("Container").gameObject.SetActive(true);
 		Dictionary<eSlot, Item> containerItems = container.getItems();
-		
-		items.Add(eSlot.LEFT, containerItems[eSlot.LEFT]);
-		items.Add(eSlot.CENTER, containerItems[eSlot.CENTER]);
-		items.Add(eSlot.RIGHT, containerItems[eSlot.RIGHT]);
+		for(int i=3; i < 6; i++){
+			if(containerItems.ContainsKey((eSlot) i)){
+				items.Add((eSlot) i, containerItems[(eSlot) i]);
+				transform.Find("Container").Find(Config.enumToNameString((eSlot) i)).gameObject.SetActive(true);
+			} else {
+				transform.Find("Container").Find(Config.enumToNameString((eSlot) i)).gameObject.SetActive(false);
+			}
+		}
 	}
 
 	void Update () {

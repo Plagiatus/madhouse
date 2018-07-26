@@ -4,6 +4,7 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[System.Serializable]
 public class Item {
 	public string itemname;
 	[Range(0, 100)]
