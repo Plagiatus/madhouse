@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33896399947519316}
   - component: {fileID: 23068252915352510}
   - component: {fileID: 65889227281066510}
-  - component: {fileID: 114269729406579236}
+  - component: {fileID: 114821432594479716}
   m_Layer: 0
   m_Name: Item1
   m_TagString: Item
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114269729406579236
+--- !u!114 &114821432594479716
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -105,9 +105,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1717526301325232}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 583a972d42bad894a9231ad41b40bbb3, type: 3}
+  m_Script: {fileID: 11500000, guid: 09f5a1715d3c15742bc59a50abcb0b5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemname: 
   noticeable: 0
   permitted: 0
+  effectOnHunger: 10
+  effectOnSleep: 0
+  effectOnStability: -20
+  effectOnSanity: 50

@@ -188,6 +188,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
+  startItems:
+  - itemname: Item1
+    noticeable: 0
+    permitted: 0
+  - itemname: 
+    noticeable: 0
+    permitted: 0
+  - itemname: 
+    noticeable: 0
+    permitted: 0
   cam: {fileID: 831752904}
   normal: {fileID: 713836987}
   normalM: {fileID: 8300000, guid: 62e048d496bc6764e8e91b356e28c770, type: 3}
