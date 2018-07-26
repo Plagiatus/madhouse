@@ -26,6 +26,7 @@ public class Door : MonoBehaviour, iInteractable
         if(openByDefault == true)
         {
             open = true;
+            animator.SetTrigger("InstantOpen");
         }
     }
     public void Update()
