@@ -7,6 +7,7 @@ public class Player : MonoBehaviour, iHumanoid
 	[Header("Attributes")]
 	#region iHumanoid
     public float movementSpeed;
+	private float turnSpeed = 4;
 
 
     public void moveTo(Vector2 pos)
@@ -49,9 +50,16 @@ public class Player : MonoBehaviour, iHumanoid
 	private int count = 0;
 	private CameraScript camScript;
 
+	private bool isCrouching;
+
 	// private Animator camAnim;
 	public Animator camAnim;
 	public Animator playerAnimator;
+
+	private float heartBeatTimer;
+	private float heartBeatFrequency;
+	private float heartBPM;
+
 	#endregion
 
 	#region UnityMethods
@@ -97,6 +105,7 @@ public class Player : MonoBehaviour, iHumanoid
 		inputManager();
 		updateMentalState();
 		updateAppearance();
+		manageSounds();
 
 		// Debug.Log("hunger: " + hunger + " sleep: " + sleep + " stability: " + stability + " sanity: " + sanity);
 	}
@@ -180,6 +189,35 @@ public class Player : MonoBehaviour, iHumanoid
 		#endregion
 		
 		#region privateMethods
+
+		private void manageSounds(){
+			if(inInventory) return;
+			DisableAllSounds();
+			if (sanity >= 0 && sanity < 50) {
+				normal.volume = 0.5f;
+			}
+			else if (sanity < 0){
+				dep.volume = 0.5f;
+				// heartbeat.volume = 1;
+				heartBPM = 40;
+				heartBeatController();
+			}
+			else {
+				rage.volume = 0.5f;
+				heartBPM = 130;
+				heartBeatController();
+				// heartbeat.volume = 1;
+			}
+		}
+
+		void heartBeatController(){
+			heartBeatTimer -= Time.deltaTime;
+			if(heartBeatTimer <= 0){
+				heartbeat.Play();
+				heartBeatTimer = 60 / heartBPM;
+			}
+		}
+
 		private void inputManager(){
 			// Debug.Log(count);
 			//move forward
@@ -211,24 +249,42 @@ public class Player : MonoBehaviour, iHumanoid
 			}
 			if(inInventory) return;
 			//turn
-			turn(Input.acceleration.x * Config.sensitivity * movementSpeed);
+			turn(Input.acceleration.x * Config.sensitivity * turnSpeed);
 
 			//interact with object
 			if(Input.GetMouseButtonDown(0)){
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				Debug.DrawRay(ray.origin, ray.direction, Color.red, 1);
 				RaycastHit hit;
 				if(Physics.Raycast(ray, out hit)){
-					if((this.transform.position - hit.transform.position).magnitude < Config.interactionDistance){
+					if (hit.transform.gameObject == this.gameObject){
+						toggleCrouching();
+					}
+					else if((this.transform.position - hit.transform.position).magnitude < Config.interactionDistance){
 						InteractWithObject(hit.transform.gameObject);
 					}
 				}
 			}
 		}
 
+		private void toggleCrouching(){
+			if(isCrouching){
+				//disable Crouching
+				isCrouching = false;
+				Config.basicMovementSpeed = 4;
+			} else {
+				//enable crouching
+				isCrouching = true;
+				Config.basicMovementSpeed = 2;
+			}
+			playerAnimator.SetBool("isCrouching", isCrouching);
+		}
+
 		private void move(float distance){
 			inInventory = false;
 			playerAnimator.SetBool("inInventory", false);
 			cam.GetComponent<CameraScript>().transitionToState(false);
+			
 
 			//TODO: rewrite to use rigidbody
 			// if(distance > 0.1 || distance < -0.1){
@@ -239,28 +295,6 @@ public class Player : MonoBehaviour, iHumanoid
 		 	// } else {
 			// 	playerAnimator.SetBool("isWalking",false);
 			// } 
-
-			// if (sanity > 0 && sanity < 60) {
-			// 	foreach(AudioSource aud in sounds){
-			// 		aud.volume = 0;
-			// 	}
-			// 	normal.volume = 1;
-			// }
-			// else if (sanity < 0){
-			// 	foreach(AudioSource aud in sounds){
-			// 		aud.volume = 0;
-			// 	}
-			// 	dep.volume = 0.8f;
-			// 	heartbeat.volume = 1;
-			// 	heartbeat.PlayDelayed(5);
-			// }
-			// else {
-			// 	foreach(AudioSource aud in sounds){
-			// 		aud.volume = 0;
-			// 	}
-			// 	rage.volume = 0.8f;
-			// 	heartbeat.volume = 1;
-			// }
 		}
 
 		private void turn(float speed){
@@ -271,7 +305,18 @@ public class Player : MonoBehaviour, iHumanoid
 			inInventory = true;
 			playerAnimator.SetBool("inInventory", true);
 			cam.GetComponent<CameraScript>().transitionToState(true);
-			invent.Play();
+
+			DisableAllSounds();
+			invent.volume = 1;
+			
+			isCrouching = false;
+			playerAnimator.SetBool("isCrouching", false);
+		}
+
+		void DisableAllSounds(){
+			foreach(AudioSource aud in sounds){
+				aud.volume = 0;
+			}
 		}
 
 		private void InteractWithObject(GameObject go){
@@ -299,7 +344,7 @@ public class Player : MonoBehaviour, iHumanoid
 			sounds.Add(dep);
 			sounds.Add(rage);
 			sounds.Add(invent);
-			sounds.Add(heartbeat);
+			// sounds.Add(heartbeat);
 			foreach(AudioSource aud in sounds){
 				aud.volume = 0;
 			}
