@@ -83,8 +83,8 @@ public class ItemDragHandler : MonoBehaviour {
 			RaycastHit hitInfo;
 			target = GetClickedObject(out hitInfo);
 			if(target != null && target.gameObject.tag == "Item"){
-				// Debug.Log(target.name);
 				if(GetClickedSlot(out hitInfo) != null) originSlot = Config.gameObjectToEnum(GetClickedSlot(out hitInfo));
+				// Debug.Log("origin: " + originSlot);
 				isDragging = true;
 				originalTargetPosition = target.transform.position;
 				positionOfScreen = Camera.main.WorldToScreenPoint(target.transform.position);
@@ -101,6 +101,7 @@ public class ItemDragHandler : MonoBehaviour {
 			RaycastHit hit;
 			GameObject slotGO = GetClickedSlot(out hit);
 			if(slotGO != null){
+				// Debug.Log("target: " + slotGO.name);
 				//if item was pulled onto a slot
 				eSlot currentSlot = Config.gameObjectToEnum(slotGO);
 				//if the new slot is currently occupied
@@ -128,7 +129,7 @@ public class ItemDragHandler : MonoBehaviour {
 					}
 				}
 
-				Debug.Log("from: " + originSlot + " to: " + currentSlot);
+				// Debug.Log("from: " + originSlot + " to: " + currentSlot);
 
 				//if both items are inside the player inventory
 				if(Config.isPlayerSlot(currentSlot) && Config.isPlayerSlot(originSlot)){
@@ -171,6 +172,7 @@ public class ItemDragHandler : MonoBehaviour {
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		int layerMask = 1 << 9;
 		GameObject t = null;
+		// Debug.DrawRay(ray.origin, ray.direction, Color.blue, 1);
 		if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
 			t = hit.collider.gameObject;
 		}
@@ -181,6 +183,7 @@ public class ItemDragHandler : MonoBehaviour {
 		GameObject t = null;
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		int layerMask = 1 << 10;
+		// Debug.DrawRay(ray.origin, ray.direction, Color.red, 1);
 		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
 			t = hit.collider.gameObject;
 		}
