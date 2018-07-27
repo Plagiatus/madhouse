@@ -51,6 +51,7 @@ public class Player : MonoBehaviour, iHumanoid
 	private CameraScript camScript;
 
 	private bool isCrouching;
+    private bool isWalking;
 
 	// private Animator camAnim;
 	public Animator camAnim;
@@ -60,11 +61,17 @@ public class Player : MonoBehaviour, iHumanoid
 	private float heartBeatFrequency;
 	private float heartBPM;
 
-	#endregion
+    //Stealth Mechanics
+    public Transform playerStart;
+    public float baseSneak = 0.25f;
+    private float currentSneakiness = 0.25f;
+    public float crouchModifier;
+    private float currentMod = 1;
+    #endregion
 
-	#region UnityMethods
-	
-	void Start(){
+    #region UnityMethods
+
+    void Start(){
 		camScript = cam.GetComponent<CameraScript>();
 		// camStandard = GetComponent<Animator>();
 		movementSpeed = 4f;
@@ -185,12 +192,33 @@ public class Player : MonoBehaviour, iHumanoid
 				//TODO: resume time
 			}
 		}
+        public void respawn()
+        {
+            this.transform.position = new Vector3(playerStart.position.x, this.transform.position.y, playerStart.position.z);
+        }
+        public float getSneak()
+        {
+            return currentSneakiness;
+        }
+    #endregion
 
-		#endregion
-		
-		#region privateMethods
+    #region privateMethods
 
-		private void manageSounds(){
+    public void handleSneaky()
+    {
+        float sneakiness = baseSneak;
+        if (isWalking)
+        {
+            sneakiness -= 0.25f;
+        }
+        if (isCrouching)
+        {
+            sneakiness += 0.25f;
+        }
+        currentSneakiness = sneakiness;
+    }
+
+    private void manageSounds(){
 			if(inInventory) return;
 			DisableAllSounds();
 			if (sanity >= 0 && sanity < 50) {
@@ -233,7 +261,8 @@ public class Player : MonoBehaviour, iHumanoid
 
 			if(Input.acceleration.z < 0.1 && Input.acceleration.z > -0.1){
 				playerAnimator.SetBool("isWalking",false);
-				count = 0;
+                isWalking = false;
+                count = 0;
 				inInventory = false;
 				playerAnimator.SetBool("inInventory", false);
 				cam.GetComponent<CameraScript>().transitionToState(false);
@@ -289,7 +318,8 @@ public class Player : MonoBehaviour, iHumanoid
 			//TODO: rewrite to use rigidbody
 			// if(distance > 0.1 || distance < -0.1){
 				playerAnimator.SetBool("isWalking",true);
-				transform.Translate(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
+                isWalking = true;
+                transform.Translate(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
 				// rb.AddRelativeForce(0, 0, distance * Time.deltaTime * movementSpeed * Config.sensitivity);
 				
 		 	// } else {

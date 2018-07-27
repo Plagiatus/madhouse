@@ -23,8 +23,19 @@ public class Guard : NPC {
     public float movementSpeed = 3.5f;
     public VisionDetection eyes;
 
+    //status display
+    public Animator guardStatus;
+
+    //Alert State
+    public float alertFadeTime = 200;
+    private float currentFadeTime;
+    public float alertThreshhold = 1;
+    private float currentAlertLevel;
+
     //Chasing
     public float range = 10;
+    [Range(0.1f,1f)]
+    public float detectionMod = 0.3f;
     GameObject currentTarget;
     private Vector3 returnPos;
     private Vector3 lastKnownPlayerPos;
@@ -109,17 +120,32 @@ public class Guard : NPC {
                 {
                     if (eyes.targetVisible(target))
                     {
-                        Debug.Log("Target aquired");
-                        if (eyes.targetDistance(target) < range)
+                        float modifiedRange = range - range * (target.GetComponent<Player>().getSneak());
+                        
+                        //Debug.Log("How far could I see the target? " + modifiedRange + "How far is it away actually? " + eyes.targetDistance(target));
+                        if (eyes.targetDistance(target) < modifiedRange*detectionMod)
                         {
-                            Debug.Log("Target in range: " + eyes.targetDistance(target) + " < " + range);
                             currentTarget = target;
                             returnPos = this.transform.position;
+                            
                             state = eState.CHASING;
                             Debug.Log("Current State: " + state);
                             lastKnownPlayerPos = target.transform.position;
                             animator.SetBool("Move", true);
+                            guardStatus.SetTrigger("detected");
                             agent.SetDestination(lastKnownPlayerPos);
+                        }
+                        if (eyes.targetDistance(target) < modifiedRange)
+                        {
+                            currentTarget = target;
+                            returnPos = this.transform.position;
+                            agent.Stop();
+                            currentAlertLevel = 0;
+                            currentFadeTime = 0;
+                            this.transform.LookAt(target.transform.position);
+                            state = eState.ALERT;
+                            guardStatus.SetBool("alert", true);
+                            Debug.Log("Current State: " + state);
                         }
                     }
                 }
@@ -139,15 +165,21 @@ public class Guard : NPC {
                 {
                     state = eState.SEARCH;
                     Debug.Log("Current State: " + state);
+                    guardStatus.SetBool("alert", true);
                     searchDuration = searchTime;
                     float randomDirection = Random.Range(0, searchRadius);
                     animator.SetBool("Move", true);
                     agent.SetDestination(new Vector3(lastKnownPlayerPos.x + randomDirection, lastKnownPlayerPos.y, lastKnownPlayerPos.z + randomDirection));
                 }
             }
+            if(Vector3.Magnitude(currentTarget.transform.position - this.transform.position)< 0.3)
+            {
+                currentTarget.GetComponent<Player>().respawn();
+            }
         }
-        if (state == eState.SEARCH)
+        else if (state == eState.SEARCH)
         {
+            guardStatus.SetBool("alert", false);
             searchDuration -= Time.deltaTime;
             if (searchDuration >= 0)
             {
@@ -166,6 +198,7 @@ public class Guard : NPC {
                     {
                         state = eState.CHASING;
                         lastKnownPlayerPos = currentTarget.transform.position;
+                        guardStatus.SetTrigger("detected");
                         animator.SetBool("Move", true);
                         agent.SetDestination(lastKnownPlayerPos);
                     }
@@ -179,6 +212,53 @@ public class Guard : NPC {
                 agent.SetDestination(currentRouteTarget.transform.position);
             }
 
+        }
+        else if (state == eState.ALERT)
+        {
+            if(currentFadeTime < alertFadeTime)
+            {
+                float targetDistance = eyes.targetDistance(currentTarget);
+                float modifiedRange = range - range * (currentTarget.GetComponent<Player>().getSneak());
+
+                //Debug.Log("How far could I see the target? " + modifiedRange + "How far is it away actually? " + eyes.targetDistance(target));
+                if (eyes.targetDistance(currentTarget) < modifiedRange * detectionMod)
+                {
+                    state = eState.CHASING;
+                    Debug.Log("Current State: " + state);
+                    lastKnownPlayerPos = currentTarget.transform.position;
+                    animator.SetBool("Move", true);
+                    guardStatus.SetTrigger("detected");
+                    agent.Resume();
+                    agent.SetDestination(lastKnownPlayerPos);
+                }
+            
+                if (eyes.targetVisible(currentTarget))
+                {
+                    currentAlertLevel += 1 - currentTarget.GetComponent<Player>().getSneak();
+                    Debug.Log("CurrentAlertness: " + currentAlertLevel);
+                }
+                currentFadeTime += Time.deltaTime;
+            }
+            else
+            {
+
+                state = eState.PATROLLING;
+                Debug.Log("Current State: " + state);
+                animator.SetBool("Move", true);
+                guardStatus.SetBool("alert", false);
+                agent.SetDestination(currentRouteTarget.transform.position);
+            }
+            if(currentAlertLevel>= alertThreshhold)
+            {
+
+                state = eState.CHASING;
+                Debug.Log("Current State: " + state);
+                lastKnownPlayerPos = currentTarget.transform.position;
+                animator.SetBool("Move", true);
+                guardStatus.SetTrigger("detected");
+                agent.Resume();
+                agent.SetDestination(lastKnownPlayerPos);
+            }
         }
     }
     // Use this for initialization

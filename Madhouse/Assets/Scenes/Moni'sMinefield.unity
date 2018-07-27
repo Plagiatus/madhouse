@@ -3281,9 +3281,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 12
+  crouchModifier: 0.5
   turningSpeed: 100
   animator: {fileID: 1056332867}
   playerStart: {fileID: 877582917}
+  baseSneak: 0.25
 --- !u!65 &619089139
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10052,8 +10054,12 @@ MonoBehaviour:
   patrolRestTime: 5
   movementSpeed: 3.5
   eyes: {fileID: 1787383934}
-  range: 10
+  alertFadeTime: 3
+  alertThreshhold: 1
+  range: 100
+  detectionMod: 0.3
   searchRadius: 10
+  nightShift: 0
   searchTime: 20
 --- !u!95 &1795416086
 Animator:
