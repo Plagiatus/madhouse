@@ -1,0 +1,12 @@
+﻿public enum eState{
+	STANDING,
+	PATROLLING,
+	RUNNING,
+	WALKING,
+	ATTACKING,
+	EATING,
+	EXAMINE,
+	SEARCH,
+    ALERT,
+    CHASING
+}

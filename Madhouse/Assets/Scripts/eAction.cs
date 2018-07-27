@@ -1,0 +1,11 @@
+﻿public enum eAction{
+	IDLE,
+	IDLE_SNEAK,
+	WALK,
+	SNEAK,
+	INTERACT,
+	ATTACK,
+	USE,
+	INVENTORY,
+	KILL
+}
