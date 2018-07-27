@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: 206d2c5e2801a5e488c4b67f285e90af
-=======
-guid: f556dfdc10bead14e84a37e25059537f
->>>>>>> master
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -20,6 +16,7 @@ ModelImporter:
     2300000: Cylinder
     3300000: Cylinder
     4300000: Cylinder
+    9500000: //RootNode
     10800000: Lamp
   externalObjects: {}
   materials:
@@ -96,7 +93,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
