@@ -1,8 +1,0 @@
-﻿public enum eSlot {
-	LEFTPOCKET,
-	RIGHTPOCKET,
-	HAND,
-	LEFT,
-	CENTER,
-	RIGHT
-}
