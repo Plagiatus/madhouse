@@ -67,7 +67,7 @@ public class VisionDetection : MonoBehaviour {
         {
             RaycastHit hit;
             Physics.Raycast(this.transform.position, targetPos - this.transform.position, out hit);
-            Debug.Log(hit.distance);
+            //Debug.Log(hit.distance);
             Debug.DrawRay(this.transform.position, targetPos - this.transform.position, Color.white, 2);
             if (hit.transform.gameObject == target)
             {

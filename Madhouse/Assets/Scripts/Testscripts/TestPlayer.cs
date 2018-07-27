@@ -7,6 +7,7 @@ public class TestPlayer : MonoBehaviour {
     public float movementSpeed;
     public float turningSpeed;
     public Animator animator;
+    public Transform playerStart;
 
     public void handleInputs()
     {
@@ -37,7 +38,10 @@ public class TestPlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
+        if (playerStart != null)
+        {
+            this.transform.position = new Vector3(playerStart.position.x, this.transform.position.y, playerStart.position.z);
+        }
 	}
 	
 	// Update is called once per frame
