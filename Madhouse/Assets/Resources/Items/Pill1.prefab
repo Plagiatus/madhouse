@@ -9,46 +9,47 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1554697597825072}
+  m_RootGameObject: {fileID: 1275509363312018}
   m_IsPrefabParent: 1
---- !u!1 &1554697597825072
+--- !u!1 &1275509363312018
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4773566365492188}
-  - component: {fileID: 33820340670934908}
-  - component: {fileID: 23906268503631656}
-  - component: {fileID: 65728965925590282}
-  - component: {fileID: 114572873784780310}
+  - component: {fileID: 4604771995741112}
+  - component: {fileID: 33580925231136046}
+  - component: {fileID: 23132219424499914}
+  - component: {fileID: 136865558831270036}
+  - component: {fileID: 114912105425153368}
+  - component: {fileID: 114082677536919188}
   m_Layer: 0
-  m_Name: Trash
+  m_Name: Pill1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4773566365492188
+--- !u!4 &4604771995741112
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1554697597825072}
-  m_LocalRotation: {x: -0.00000003774895, y: 0.00000004371139, z: 1.7112915e-15, w: 1}
-  m_LocalPosition: {x: 8.383, y: 0.563, z: 2.612}
-  m_LocalScale: {x: 40, y: 40, z: 40}
+  m_GameObject: {fileID: 1275509363312018}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.233, z: -2.33}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23906268503631656
+--- !u!23 &23132219424499914
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1554697597825072}
+  m_GameObject: {fileID: 1275509363312018}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -58,7 +59,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 38df50251b714ba4580b6887e3eeaf1a, type: 2}
+  - {fileID: 2100000, guid: a8b4f37cba2a844aeb3c22dda00d8d95, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -78,37 +79,55 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33820340670934908
+--- !u!33 &33580925231136046
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1554697597825072}
-  m_Mesh: {fileID: 4300000, guid: 04eb2a943a4c2714e9d66b99957bcf8d, type: 3}
---- !u!65 &65728965925590282
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1554697597825072}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.008259, y: 0.017013054, z: 0.009432782}
-  m_Center: {x: -0.0000028426293, y: 0.000029057264, z: 0.0004777806}
---- !u!114 &114572873784780310
+  m_GameObject: {fileID: 1275509363312018}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114082677536919188
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1554697597825072}
+  m_GameObject: {fileID: 1275509363312018}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89578a0c53d99334d875dbd943973058, type: 3}
+  m_Script: {fileID: 11500000, guid: e308af2c159692b4bbd4703c4b9125d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startItems:
-  - itemname: 
-    noticeable: 0
-    permitted: 0
+  itemname: Pill1
+  noticeable: 30
+  permitted: 0
+  effectOnHunger: 0
+  effectOnSleep: 0
+  effectOnStability: -50
+  effectOnSanity: 30
+--- !u!114 &114912105425153368
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1275509363312018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c63778b1921cf7c46bf808e971cff202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemname: Pill1
+  noticeable: 29
+  permitted: 0
+--- !u!136 &136865558831270036
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1275509363312018}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

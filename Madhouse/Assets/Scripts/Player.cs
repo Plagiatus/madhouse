@@ -301,10 +301,14 @@ public class Player : MonoBehaviour, iHumanoid
 				//disable Crouching
 				isCrouching = false;
 				Config.basicMovementSpeed = 4;
+				GetComponent<BoxCollider>().size = GetComponent<BoxCollider>().size * 1.5f;
+				GetComponent<BoxCollider>().center = new Vector3(GetComponent<BoxCollider>().center.x, 0.9f, GetComponent<BoxCollider>().center.z);
 			} else {
 				//enable crouching
 				isCrouching = true;
 				Config.basicMovementSpeed = 2;
+				GetComponent<BoxCollider>().size = GetComponent<BoxCollider>().size / 1.5f;
+				GetComponent<BoxCollider>().center = new Vector3(GetComponent<BoxCollider>().center.x, 0.45f, GetComponent<BoxCollider>().center.z);
 			}
 			playerAnimator.SetBool("isCrouching", isCrouching);
 		}

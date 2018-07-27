@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33105084033030910}
   - component: {fileID: 23422679614151962}
   - component: {fileID: 65427229147406932}
+  - component: {fileID: 114247569401039824}
   m_Layer: 0
   m_Name: BigDrawer
   m_TagString: Untagged
@@ -96,3 +97,24 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.05161963, y: 0.027707964, z: 0.014997695}
   m_Center: {x: -0.000000025145715, y: -0.0005216561, z: 0.00020961538}
+--- !u!114 &114247569401039824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1837094514964068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89578a0c53d99334d875dbd943973058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startItems:
+  - itemname: 
+    noticeable: 0
+    permitted: 0
+  - itemname: 
+    noticeable: 0
+    permitted: 0
+  - itemname: 
+    noticeable: 0
+    permitted: 0
