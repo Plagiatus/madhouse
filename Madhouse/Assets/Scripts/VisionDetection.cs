@@ -63,7 +63,6 @@ public class VisionDetection : MonoBehaviour {
     {
         Vector3 targetPos = target.GetComponentInChildren<Renderer>().bounds.center;
         Vector3 viewportPos = camera.WorldToViewportPoint(targetPos);
-        Debug.Log("viewportPos" + viewportPos);
         if (viewportPos.x > 0 && viewportPos.x < 1 && viewportPos.y > 0 && viewportPos.y < 1 && viewportPos.z > 0)
         {
             RaycastHit hit;
