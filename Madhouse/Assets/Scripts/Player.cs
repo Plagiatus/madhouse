@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour, iHumanoid
 {
@@ -67,11 +68,15 @@ public class Player : MonoBehaviour, iHumanoid
     private float currentSneakiness = 0.25f;
     public float crouchModifier;
     private float currentMod = 1;
+	private bool gameOver = false; 
     #endregion
 
     #region UnityMethods
 
     void Start(){
+		cam.SetActive(true);
+		// cam.transform.position = new Vector3(0, 2, -2.4f);
+		// cam.transform.rotation = Quaternion.Euler(15, 0 , 0);
 		camScript = cam.GetComponent<CameraScript>();
 		// camStandard = GetComponent<Animator>();
 		movementSpeed = 4f;
@@ -115,6 +120,11 @@ public class Player : MonoBehaviour, iHumanoid
 		manageSounds();
 
 		// Debug.Log("hunger: " + hunger + " sleep: " + sleep + " stability: " + stability + " sanity: " + sanity);
+
+		if(!gameOver && (this.transform.position - new Vector3(-3, 1, -25)).sqrMagnitude < 16){
+			gameOver = true;
+			SceneManager.LoadSceneAsync("Thanks");
+		}
 	}
 
 	#endregion
