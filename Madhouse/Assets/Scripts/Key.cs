@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Key : Item {
+public class Key : Item_Mono {
 
 	[Range(0,5)]
-	private int accessLevel;
+	public int accessLevel;
 
 	public Key(string _name, int _noticeable, bool _permitted, int _accessLevel) : base(_name, _noticeable, _permitted){
 		accessLevel = _accessLevel;

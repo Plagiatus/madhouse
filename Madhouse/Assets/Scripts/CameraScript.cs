@@ -57,11 +57,12 @@ public class CameraScript : MonoBehaviour {
         Vector3 hitPoint;
         
         Vector3 rayDirection = (player.transform.forward * -1);
-        Ray ray = new Ray(player.transform.position + Vector3.up * 1.4f + player.transform.right, Quaternion.AngleAxis(15, player.transform.right) * rayDirection);
+        // Ray ray = new Ray(player.transform.position + Vector3.up * 1.4f + player.transform.right, Quaternion.AngleAxis(15, player.transform.right) * rayDirection);
+        Ray ray = new Ray(player.transform.position + Vector3.up * 2f, rayDirection);
         // Debug.DrawRay(ray.origin, ray.direction, Color.green, 1);
         // Debug.Log(ray.direction);
         // Debug.Log(Physics.Raycast(ray, out hit, 2.5f));
-        if (Physics.Raycast(ray, out hit, 2.5f)){
+        if (Physics.Raycast(ray, out hit, 2.4f)){
             hitPoint = hit.point;
             // Debug.Log("hit");
             // Debug.Log(hitPoint);

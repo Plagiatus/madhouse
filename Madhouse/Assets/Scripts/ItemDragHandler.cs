@@ -77,7 +77,7 @@ public class ItemDragHandler : MonoBehaviour {
 		}
 		foreach(KeyValuePair<eSlot,Item> pair in items){
 			if(pair.Value != null){
-				GameObject newItem = (GameObject) Instantiate(Resources.Load("Prefab/" + pair.Value.itemname));
+				GameObject newItem = (GameObject) Instantiate(Resources.Load("Items/" + pair.Value.itemname));
 				newItem.transform.position = GameObject.Find(Config.enumToNameString(pair.Key)).transform.position + Vector3.up * newItem.gameObject.GetComponent<Renderer>().bounds.size.y * 0.5f;
 				newItem.GetComponent<Item_Mono>().itemname = pair.Value.itemname;
 				newItem.transform.parent = this.transform;
@@ -114,7 +114,7 @@ public class ItemDragHandler : MonoBehaviour {
 			target = GetClickedObject(out hitInfo);
 			if(target != null && target.gameObject.tag == "Item"){
 				if(GetClickedSlot(out hitInfo) != null) originSlot = Config.gameObjectToEnum(GetClickedSlot(out hitInfo));
-				if(timer > 0.2){
+				if(timer > 0.4){
 					// Debug.Log("origin: " + originSlot);
 					isDragging = true;
 					originalTargetPosition = target.transform.position;
