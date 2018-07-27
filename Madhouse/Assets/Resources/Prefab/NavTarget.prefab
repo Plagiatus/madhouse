@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4624413771048284}
   - component: {fileID: 33462571880387558}
   - component: {fileID: 23255096168532516}
-  - component: {fileID: 135829132997293890}
   - component: {fileID: 114620976857282438}
   m_Layer: 0
   m_Name: NavTarget
@@ -99,15 +98,3 @@ MonoBehaviour:
   name: 
   nextTarget: []
   probability: []
---- !u!135 &135829132997293890
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1146283351197036}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

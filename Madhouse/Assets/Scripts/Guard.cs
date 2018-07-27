@@ -277,6 +277,7 @@ public class Guard : NPC {
         animator.SetFloat("MoveSpeed", movementSpeed);
         animator.SetBool("Move", true);
         agent.speed = movementSpeed;
+        
     }
 	
 	// Update is called once per frame
