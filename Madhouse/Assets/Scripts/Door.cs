@@ -31,18 +31,18 @@ public class Door : MonoBehaviour, iInteractable
     }
     public void Update()
     {
-        // if(!openByDefault)
-        // {
-        //     if (openDuration >= 0)
-        //     {
-        //         openDuration = openDuration - Time.deltaTime;
-        //     }
-        //     else
-        //     {
-        //         openDuration = 0;
-        //         animator.SetBool("Open", false);
-        //     }
-        // }
+        if(!openByDefault)
+        {
+            if (openDuration >= 0)
+            {
+                openDuration = openDuration - Time.deltaTime;
+            }
+            else
+            {
+                openDuration = 0;
+                animator.SetBool("Open", false);
+            }
+        }
  
     }
 
