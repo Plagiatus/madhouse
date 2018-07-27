@@ -10,7 +10,7 @@ public class Door : MonoBehaviour, iInteractable
 
 	[Range(0,5)]
 	private int accessLevel;
-	private bool open = false;
+	public bool open = false;
 	private Room[] adjacentRooms;
 	private bool isFinalExit;
     private Animator animator;
@@ -31,18 +31,18 @@ public class Door : MonoBehaviour, iInteractable
     }
     public void Update()
     {
-        if(!openByDefault)
-        {
-            if (openDuration >= 0)
-            {
-                openDuration = openDuration - Time.deltaTime;
-            }
-            else
-            {
-                openDuration = 0;
-                animator.SetBool("Open", false);
-            }
-        }
+        // if(!openByDefault)
+        // {
+        //     if (openDuration >= 0)
+        //     {
+        //         openDuration = openDuration - Time.deltaTime;
+        //     }
+        //     else
+        //     {
+        //         openDuration = 0;
+        //         animator.SetBool("Open", false);
+        //     }
+        // }
  
     }
 
@@ -54,6 +54,7 @@ public class Door : MonoBehaviour, iInteractable
         
         open = _open;
         animator.SetBool("Open", open);
+        GetComponent<BoxCollider>().isTrigger = open;
 		return open;
 	} 
 

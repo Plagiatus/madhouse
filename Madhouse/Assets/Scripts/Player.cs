@@ -254,7 +254,7 @@ public class Player : MonoBehaviour, iHumanoid
 			//interact with object
 			if(Input.GetMouseButtonDown(0)){
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				Debug.DrawRay(ray.origin, ray.direction, Color.red, 1);
+				// Debug.DrawRay(ray.origin, ray.direction, Color.red, 1);
 				RaycastHit hit;
 				if(Physics.Raycast(ray, out hit)){
 					if (hit.transform.gameObject == this.gameObject){
@@ -326,7 +326,7 @@ public class Player : MonoBehaviour, iHumanoid
 		private void InteractWithObject(GameObject go){
 			if(go.GetComponent<Door>() != null){
 				Door door = go.GetComponent<Door>();
-				//TODO: implement Door interaction
+				door.setOpen(!door.open);
 			} else if (go.GetComponent<Container>() != null){
 				Container container = go.GetComponent<Container>();
 				//TODO: implement Container interaction
